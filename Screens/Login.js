@@ -66,9 +66,6 @@ const  LoginScreen = ({navigation}) =>{
                 placeholder="Username"
                 >
                     
-
-
-
                 </TextInput>*/}
 
 

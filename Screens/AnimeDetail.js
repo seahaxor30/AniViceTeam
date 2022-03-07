@@ -25,8 +25,6 @@ const saveCard = async (key,value) => {
     try {
         await AsyncStorage.setItem(key, value)
         console.log("yo");
-        
-        <Ionicons style={styles.close} name="bookmark" size={70} color="white" />
 
 
       } catch (e) {
@@ -36,12 +34,16 @@ const saveCard = async (key,value) => {
     return(
         <ScrollView>
         <View>
-        <ImageBackground
+        <Image
             source={{ uri: itemUrl}}
             style={styles.itemPhoto}
             
             resizeMode="stretch">
-            <TouchableOpacity onLongPress= {() => {
+
+            
+        </Image>
+        <View>
+        <TouchableOpacity style={styles.close} onLongPress= {() => {
                 check = "saved";
                 const jsonValue = JSON.stringify({t: itemTitle, d: itemSynopsis, pic: itemUrl});
                 saveCard(itemTitle, jsonValue);
@@ -51,21 +53,23 @@ const saveCard = async (key,value) => {
                 text2: itemTitle
                 });
              
-                  }}>
+                  }}
+                  >
             
 
                    
-            <Ionicons style={styles.close} name="bookmark" size={70} color="#057DFE" />
+            <Ionicons name="bookmark" size={70} color="#057DFE" />
             </TouchableOpacity>
-    
-
-            
-        </ImageBackground>
-            
-        <Text>
+    </View>
+    <View style={{margin:"5%",alignContent:"center",justifyContent:"center"}}> 
+        <Text style={{marginTop:"2%",fontSize:20,fontWeight:"bold"}}>
+          Synopsis
+        </Text>
+        <Text style={styles.itemText}>
             {itemSynopsis}
 
         </Text>
+        </View>
         </View>
 
 
@@ -83,20 +87,28 @@ const saveCard = async (key,value) => {
         margin: 10,
       },
       itemPhoto: {
-        width:setWidth(100), 
-        height:setHeight(40)
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        //width:setWidth(100), 
+        height:setHeight(40),
       },
       itemText: {
         //color: 'b',
-        marginTop: 5,
+        //margin: "5%",
+        marginTop:setHeight(1),
+        textAlign:"justify",
+        lineHeight: 25,
       },
 
       close: {
-        //margin: setWidth(40),
-
-        position: "absolute",
-        top:setHeight(30),
-        right:0
+        marginTop: setHeight(30),
+        marginStart:"80%",
+        //position:"absolute",
+        //top:setHeight(30),
+        right:0,
 
         //width: 25,
         //height: 25,
