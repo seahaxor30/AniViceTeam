@@ -1,5 +1,5 @@
-import React from "react";
-import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions} from "react-native";
+import React, { useRef } from "react";
+import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions,Animated} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,12 +15,57 @@ const windowHeight = Dimensions.get('window').height;
 const  SignUpScreen = ({navigation}) =>{
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const[name, setName] = React.useState('');
+    const [name, setName] = React.useState('');
+    const [emailError, setEmailError] = React.useState("");
+    const [passwordError, setPasswordError] = React.useState("");
+    const [nameError, setNameError] = React.useState("");
     const [isSignedin, setSignedin] = React.useState(false);
 
     const SignUpUser = () =>{
-        createUserWithEmailAndPassword(authenication,email,password)
-        .then((userCredential)=>{
+      var nameValid = false;
+        if (name.length == 0){
+          setNameError("Name is required");
+        }
+        else{
+          setNameError("")
+          nameValid = true
+        }
+      var emailValid = false;
+        if(email.length == 0){
+            setEmailError("Email is required");
+        }              
+        else if(email.indexOf(' ') >= 0){        
+            setEmailError('Email cannot contain spaces');                          
+        }
+        else if (!email.toLowerCase().match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )){
+          setEmailError("Not Valid Email")
+        }
+        
+        else{
+            setEmailError("");
+            emailValid = true;
+        }
+    
+        var passwordValid = false;
+        if(password.length == 0){
+            setPasswordError("Password is required");
+        }        
+        else if(password.length < 6){
+            setPasswordError("Password should be minimum 6 characters");
+        }      
+        else if(password.indexOf(' ') >= 0){        
+            setPasswordError('Password cannot contain spaces');                          
+        }    
+        else{
+            setPasswordError("")
+            passwordValid = true
+        }        
+    
+        if(emailValid && passwordValid && nameValid){            
+            createUserWithEmailAndPassword(authenication,email,password)
+            .then((userCredential)=>{
             console.log(userCredential);
             const user = userCredential.user;
             updateProfile(user,{displayName:name})
@@ -30,8 +75,6 @@ const  SignUpScreen = ({navigation}) =>{
               text1: 'Account Created :)',
               text2: 'Press "Have an account?" to login'
               });
-            
-
             //console.log(user);
             //setSignedin(true);
 
@@ -43,14 +86,26 @@ const  SignUpScreen = ({navigation}) =>{
             const errorMessage = error.message;
             console.error(errorCode);
             console.error(errorMessage);
+            if (errorCode == "auth/email-already-in-use"){
+              emailValid = false;
+              setEmailError("Email is already in use");
 
-        })
 
-
-
+            }
+        })     
+      }        
     }
-
-
+  
+  const loginNavigate = () => {
+    navigation.navigate("Login")
+    setEmailError("")
+    setNameError("")
+    setPasswordError("")
+    setEmail("")
+    setPassword("")
+    setName("")
+    
+  }
     
   return( 
 
@@ -62,25 +117,50 @@ const  SignUpScreen = ({navigation}) =>{
                 Sign Up
             </Text>
             </View>
+            <View>
+            
+            {nameError.length > 0 &&
+                  <Text style={{color:"red",marginStart:10}}>{nameError}</Text>
+
+                }
+          
             <TextInput
                 style={styles.input}
                 placeholder="Name"
                 value = {name}
+                onFocus={ () => setNameError("") }
                 onChangeText={text => setName(text)}>
             </TextInput>
+            </View>
+            <View>
+            {emailError.length > 0 &&
+                  <Text style={{color:"red",marginStart:10}}>{emailError}</Text>
+                }
+
+            
             <TextInput
                 style={styles.input}
                 placeholder="Email"
                 value = {email}
+                onFocus={ () => setEmailError("") }
                 onChangeText={text => setEmail(text)}>
             </TextInput>
-
+            </View>
+            <View>
+            {passwordError.length > 0 &&
+            
+            <Text style={{color:"red",marginStart:10}}>{passwordError}</Text>
+          }
+              
             <TextInput
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
+                onFocus={ () => setPasswordError("") }
+
                 onChangeText={text => setPassword(text)}>
             </TextInput>
+            </View>
             <View style={{marginTop: 20,width:"50%"}}>
 
             <TouchableOpacity style={styles.button}
@@ -91,7 +171,7 @@ const  SignUpScreen = ({navigation}) =>{
             <View style={{marginTop: 20,width:"50%"}}>
 
             <TouchableOpacity style={styles.button}
-            onPress={() => navigation.navigate("Login")}
+            onPress={loginNavigate}
             >
             <Text style={styles.buttonText}>Have an account ?</Text>
             </TouchableOpacity>
