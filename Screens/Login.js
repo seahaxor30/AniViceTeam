@@ -4,7 +4,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { authenication } from "../firebase";
-import {createUserWithEmailAndPassword} from "firebase/auth";
 import {signInWithEmailAndPassword } from "firebase/auth";
 
 
@@ -15,9 +14,36 @@ const windowHeight = Dimensions.get('window').height;
 const  LoginScreen = ({navigation}) =>{
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [emailError, setEmailError] = React.useState("");
+    const [passwordError, setPasswordError] = React.useState("");
     //const [isSignedin, setSignedin] = React.useState(false);
 
-    const LoginUser = () =>{
+    const LoginUser = () =>{     
+    var emailValid = false;
+      if(email.length == 0){
+          setEmailError("Email is required");
+      }              
+      else if (!email.toLowerCase().match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )){
+        setEmailError("Invalid Email")
+      }
+      
+      else{
+          setEmailError("");
+          emailValid = true;
+      }
+  
+      var passwordValid = false;
+      if(password.length == 0){
+          setPasswordError("Password is required");
+      }         
+      else{
+          setPasswordError("")
+          passwordValid = true
+      }        
+  
+      if(emailValid && passwordValid){
         signInWithEmailAndPassword(authenication,email,password)
         .then((userCredential)=>{
             console.log(userCredential);
@@ -29,12 +55,30 @@ const  LoginScreen = ({navigation}) =>{
         .catch((error)=>{
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.error(errorCode);
-            console.error(errorMessage);
+            //console.error(errorCode);
+            //console.error(errorMessage);
+            if (errorCode == "auth/wrong-password"){
+              passwordValid = false;
+              setPasswordError("Wrong Password");
+            }
+            if (errorCode == "auth/user-not-found"){
+              emailValid = false;
+              setEmailError("Account not found");
+
+            }
 
         })
 
     }
+  }
+  const backToSignUp = () => {
+    navigation.navigate("Sign Up")
+    setEmailError("")
+    setPasswordError("")
+    setEmail("")
+    setPassword("")
+    
+  }
 
     React.useEffect(()=>{
         const unsubscribe = authenication.onAuthStateChanged(user=>{
@@ -48,6 +92,7 @@ const  LoginScreen = ({navigation}) =>{
 
         return unsubscribe;
     },[])
+    
 
     
     return(
@@ -61,72 +106,50 @@ const  LoginScreen = ({navigation}) =>{
                     Login
                 </Text>
                 </View>
-                {/*<TextInput
-                style={styles.input}
-                placeholder="Username"
-                >
-                    
-                </TextInput>*/}
+            <View>
+            {emailError.length > 0 &&
+                  <Text style={{color:"red",marginStart:10}}>{emailError}</Text>
+                }
 
-
-                <TextInput
+            
+            <TextInput
                 style={styles.input}
                 placeholder="Email"
                 value = {email}
-                onChangeText={text => setEmail(text)}
-
-
-
-
-                
-                >
-
-
-
-                </TextInput>
-
-                <TextInput
+                onFocus={ () => setEmailError("") }
+                onChangeText={text => setEmail(text)}>
+            </TextInput>
+            </View>
+            <View>
+            {passwordError.length > 0 &&
+            
+            <Text style={{color:"red",marginStart:10}}>{passwordError}</Text>
+          }
+              
+            <TextInput
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
-                onChangeText={text => setPassword(text)}
+                onFocus={ () => setPasswordError("") }
 
+                onChangeText={text => setPassword(text)}>
+            </TextInput>
+            </View>
+            <View style={{marginTop: 20,width:"50%"}}>
 
-                
-                >
+            <TouchableOpacity style={styles.button}
+            onPress={LoginUser}>
+            <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+            </View>
+            <View style={{marginTop: 20,width:"50%"}}>
 
-
-
-                </TextInput>
-                <View style={{marginTop: 20,width:"50%"}}>  
-                <TouchableOpacity style={styles.button}
-                onPress={LoginUser}
-
-                
-                
-                
-                
-                >
-                <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-                </View>
-                <View style={{marginTop: 20,width:"50%"}}>
-
-                <TouchableOpacity style={styles.button}
-                onPress={() => navigation.navigate("Sign Up")}
-                >
-                <Text style={styles.buttonText}>Don't have an account ?</Text>
-                </TouchableOpacity>
-                </View>
-
-
-
-
-                
-
-
-
-                
+            <TouchableOpacity style={styles.button}
+            onPress={backToSignUp}
+            >
+            <Text style={styles.buttonText}>Don't have an account ?</Text>
+            </TouchableOpacity>
+            </View>          
             </SafeAreaView>
             
 
