@@ -2,11 +2,16 @@ import { signOut } from "firebase/auth";
 import React from "react";
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { updateProfile } from "firebase/auth";
-import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Image} from "react-native";
+import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Image,Dimensions,ScrollView} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { authenication } from "../firebase";
 import { Avatar } from 'react-native-paper';
+import { Ionicons} from '@expo/vector-icons';
 
+const { width,height } = Dimensions.get("screen");
+
+const setWidth = (w) => (width / 100) * w;
+const setHeight = (h) => (height / 100) * h;
 
 
 const  ProfileScreen = ({navigation}) =>{
@@ -76,7 +81,7 @@ const  ProfileScreen = ({navigation}) =>{
 
   return(
     <SafeAreaView style={styles.safearea}>
-    <View style={{alignItems: 'center',justifyContent:"center"}}>
+    <View style={{alignItems: 'center',justifyContent:"center",marginTop:"7%"}}>
     <TouchableOpacity onPress={() => navigation.navigate("Change Profile Picture")} onLongPress={()=>removePhoto()}>
     <Avatar.Image style={{backgroundColor:"white"}} size={200} source={{uri: avatar}} />
     </TouchableOpacity>
@@ -85,13 +90,27 @@ const  ProfileScreen = ({navigation}) =>{
     </View>
     </View>
     <View style = {styles.view}>
-      <View style={{width:"50%"}}>
-        <TouchableOpacity style={styles.button}
+      <View style={{backgroundColor:"yellow",width:"100%"}}>
+        <TouchableOpacity style={{position:"absolute",bottom:setHeight(25),left:setWidth(30)}}
           onPress={handleSignOut}>
-          <Text style={styles.buttonText}>Logout</Text>
+          <Ionicons name="log-out-outline" size={50} color="black" />
         </TouchableOpacity>
-      </View>        
+      </View>
+     
     </View>
+    <View style={{alignItems:"center",width:"98%",height:"60%",borderWidth:0,marginTop:"5%"}}>
+    <View style={{alignItems:"center",backgroundColor:"white",borderTopLeftRadius:30,borderTopEndRadius:30,width:"100%"}}>
+    <Text style={{fontSize:25,fontWeight:"bold"}}>My Posts</Text>
+    </View>
+    <View style={{backgroundColor:"white",width:"100%",height:"91%"}}>
+
+      <ScrollView>
+        <Text>//POSTS HERE</Text>
+
+      </ScrollView>
+    
+    </View>
+    </View>    
     </SafeAreaView>
   );
   }
@@ -115,11 +134,11 @@ const  ProfileScreen = ({navigation}) =>{
       flex: 1,
       alignItems: 'center',
       justifyContent:"center",
-
-      bottom: 100
     },
     safearea: {
       flex: 1,
+      alignItems: 'center',
+      justifyContent:"center",
 
     },
 
