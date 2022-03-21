@@ -7,6 +7,7 @@ import Position from "react-native/Libraries/Components/Touchable/Position";
 //import { ImageBackground } from "react-native-web";
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
+import { async } from "@firebase/util";
 
 
 const { width,height } = Dimensions.get("screen");
@@ -16,8 +17,54 @@ const setHeight = (h) => (height / 100) * h;
 
 const  AnimeDetailScreen = ({ route, navigation }) =>{
 const {itemid,itemUrl,itemTitle,itemSynopsis,itemsmallUrl } = route.params;
+const [stats, setStats] = React.useState([]);
+const [communityScore, setComunityScore] = React.useState([]);
 
 //console.log(itemid,itemUrl,itemTitle,itemSynopsis)
+
+React.useEffect(() => {
+    getData();
+  }, []);
+
+const getData =  async() => {
+
+	const response = await fetch(`https://api.jikan.moe/v4/anime/`+(itemid)+`/statistics`);
+	const data = await response.json();
+	//console.log(data);
+	//console.log(data.data.scores)
+	var communityScore = 0;
+	var votes = [];
+	var top3 = [];
+
+	//console.log(stats)
+	//load the number of votes for each score into the array
+	for(var i = 0; i < data.data.scores.length; i++){
+		votes.push(data.data.scores[i].votes);
+	}
+
+	//sort votes in descending order
+	votes.sort((a, b) => a < b ? 1 : a > b ? -1 : 0);
+	//console.log(votes)
+
+	//find index of top votes to find score value
+	for(var i = 0; i < 3; i++){
+		let obj = data.data.scores.find(o => o.votes === votes[i]);
+		top3.push(obj);
+	}
+
+	//get the average score of the top 3 scores
+	for(var i = 0; i < 3; i++){
+		communityScore += top3[i].score;
+	}
+
+	communityScore = (communityScore/3).toFixed(1);
+	
+	setComunityScore(communityScore);
+
+	console.log(`Community score: ` + communityScore)
+}
+
+
 let check = "";
 let color;
 navigation.setOptions({title: itemTitle});
@@ -52,22 +99,22 @@ const saveCard = async (key,value) => {
                 text1: 'Added Anime to Watchlist',
                 text2: itemTitle
                 });
-             
-                  }}
-                  >
-            
-
+                  }
+              }>
                    
             <Ionicons name="bookmark" size={70} color="#057DFE" />
             </TouchableOpacity>
     </View>
     <View style={{margin:"5%",alignContent:"center",justifyContent:"center"}}> 
         <Text style={{marginTop:"2%",fontSize:20,fontWeight:"bold"}}>
-          Synopsis
+			Community Score: {communityScore}
+			
         </Text>
-        <Text style={styles.itemText}>
-            {itemSynopsis}
-
+		<Text style={{marginTop:"2%",fontSize:20,fontWeight:"bold"}}>
+			Synopsis
+		</Text>
+          <Text style={styles.itemText}>
+			{itemSynopsis}
         </Text>
         </View>
         </View>
