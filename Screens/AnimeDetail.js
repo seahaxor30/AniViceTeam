@@ -17,7 +17,6 @@ const setHeight = (h) => (height / 100) * h;
 
 const  AnimeDetailScreen = ({ route, navigation }) =>{
 const {itemid,itemUrl,itemTitle,itemSynopsis,itemsmallUrl } = route.params;
-const [stats, setStats] = React.useState([]);
 const [communityScore, setCommunityScore] = React.useState([]);
 
 //console.log(itemid,itemUrl,itemTitle,itemSynopsis)
@@ -28,7 +27,6 @@ React.useEffect(() => {
   }, []);
 
 const getData =  async() => {
-
 	const response = await fetch(`https://api.jikan.moe/v4/anime/`+(itemid)+`/statistics`);
 	const data = await response.json();
 	//console.log(data);
@@ -93,7 +91,7 @@ const saveCard = async (key,value) => {
         <View>
         <TouchableOpacity style={styles.close} onLongPress= {() => {
                 check = "saved";
-                const jsonValue = JSON.stringify({t: itemTitle, d: itemSynopsis, pic: itemUrl});
+                const jsonValue = JSON.stringify({t: itemTitle, d: itemSynopsis, pic: itemUrl, id: itemid});
                 saveCard(itemTitle, jsonValue);
                 Toast.show({
                 type: 'success',

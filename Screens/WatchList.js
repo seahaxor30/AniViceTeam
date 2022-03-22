@@ -78,12 +78,12 @@ const Settingscreen = ({ navigation }) => {
     }
     return localStorage.map((digest, i) => {
       const parsed = JSON.parse(digest[1]);
-      if(parsed["t"] == null || parsed["d"] == null || parsed["pic"] == null){
+      if(parsed["t"] == null || parsed["d"] == null || parsed["pic"] == null || parsed["id"]== null){
         return(<Text key={i}></Text>)
       }
       return(
         <Card style = {styles.cardStyle} elevation = {2} onPress = {() => {
-          navigation.navigate("Anime Detail", {itemTitle: parsed["t"], itemSynopsis: parsed["d"], itemUrl: parsed["pic"]});
+          navigation.navigate("Anime Detail", {itemTitle: parsed["t"], itemSynopsis: parsed["d"], itemUrl: parsed["pic"], itemid: parsed["id"]});
           }} key = {i} 
           onLongPress = {() => {
             removeSavedDigest(parsed["t"]);
