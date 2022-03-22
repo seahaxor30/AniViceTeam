@@ -18,11 +18,12 @@ const setHeight = (h) => (height / 100) * h;
 const  AnimeDetailScreen = ({ route, navigation }) =>{
 const {itemid,itemUrl,itemTitle,itemSynopsis,itemsmallUrl } = route.params;
 const [stats, setStats] = React.useState([]);
-const [communityScore, setComunityScore] = React.useState([]);
+const [communityScore, setCommunityScore] = React.useState([]);
 
 //console.log(itemid,itemUrl,itemTitle,itemSynopsis)
 
 React.useEffect(() => {
+	setCommunityScore("Loading");
     getData();
   }, []);
 
@@ -59,7 +60,7 @@ const getData =  async() => {
 
 	communityScore = (communityScore/3).toFixed(1);
 	
-	setComunityScore(communityScore);
+	setCommunityScore(communityScore);
 
 	console.log(`Community score: ` + communityScore)
 }
