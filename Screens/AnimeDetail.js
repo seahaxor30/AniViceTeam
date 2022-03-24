@@ -45,7 +45,7 @@ const saveCard = async (key,value) => {
         <View>
         <TouchableOpacity style={styles.close} onLongPress= {() => {
                 check = "saved";
-                const jsonValue = JSON.stringify({t: itemTitle, d: itemSynopsis, pic: itemUrl});
+                const jsonValue = JSON.stringify({t: itemTitle, d: itemSynopsis, pic: itemUrl,id:itemid});
                 saveCard(itemTitle, jsonValue);
                 Toast.show({
                 type: 'success',
