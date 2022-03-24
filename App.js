@@ -15,6 +15,13 @@ import SignUpScreen from './Screens/SignUp';
 import LoginScreen from './Screens/Login';
 import PfpEditor from './Screens/PhotoEditor';
 import Toast from 'react-native-toast-message';
+import CreateRec from './Screens/createRec';
+import Recommend from './Screens/recommend';
+import SearchRec from './Screens/SearchRec';
+import UserRecommend from './Screens/UserRecommend';
+import CreateDiscuss from './Screens/createDiscuss';
+import Discuss from './Screens/discuss';
+import CreateComment from './Screens/createComment';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +39,18 @@ export default function App() {
     <Stack.Screen name = "Sign Up" component = {SignUpScreen} options={{headerShown: false}}/>
     <Stack.Screen name = "Login" component = {LoginScreen} options={{headerShown: false}}/>
     <Stack.Screen name = "Change Profile Picture" component = {PfpEditor} options={{headerShown: true}}/>
+    <Stack.Screen name = "Create Recommendation" component = {CreateRec} options={{headerShown: true}}/>
+    <Stack.Screen name = "Recommend" component = {Recommend} options={{headerShown: true}}/>
+    <Stack.Screen name = "Search Recommendation" component = {SearchRec} options={{headerShown: true}}/>
+    <Stack.Screen name = "User Recommend" component = {UserRecommend} options={{headerShown: true}}/>
+    <Stack.Screen name = "Create Discussion" component = {CreateDiscuss} options={{headerShown: true}}/>
+    <Stack.Screen name = "Discuss" component = {Discuss} options={{headerShown: true}}/>
+    <Stack.Screen name = "Create Comment" component = {CreateComment} options={{headerShown: true}}/>
+
+
+
+
+
 
 
 

@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { authenication } from "../firebase";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import Toast from 'react-native-toast-message';
+import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc } from "firebase/firestore"
 
 
 
@@ -68,7 +69,13 @@ const  SignUpScreen = ({navigation}) =>{
             .then((userCredential)=>{
             console.log(userCredential);
             const user = userCredential.user;
-            updateProfile(user,{displayName:name})
+            updateProfile(user,{displayName:name, photoURL:"https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg"})
+            const db = getFirestore();
+            setDoc(doc(db,"Users",user.uid), {
+              postNum: 0,
+              commentNum: 0,
+              discussNum: 0
+          });
             console.log(user.displayName);
             Toast.show({
               type: 'success',

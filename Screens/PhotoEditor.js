@@ -76,6 +76,7 @@ const PfpEditor = ({navigation}) => {
                     resizeMode="cover"
                 />
             </TouchableOpacity>
+            
             <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
         <Text style={styles.textPrimary}>Change Your Profile Picture?</Text>
         <Image source={{uri: imageUri}}style ={styles.overlayImage} />

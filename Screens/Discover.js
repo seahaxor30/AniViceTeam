@@ -26,9 +26,9 @@ import SearchAnime from "../components/SearchBar";
 const Discover = ({navigation}) => {
   const [value, onChangeText] = React.useState("");
 
-  const [ airingNow, SetAiring] = React.useState([]);
+  const [airingNow, SetAiring] = React.useState([]);
   const [topAnime, SetTopAnime] = React.useState([]);
-  const [ upcoming, SetUpcoming] = React.useState([]);
+  const [upcoming, SetUpcoming] = React.useState([]);
 
 
   //function updateSearch(value) {
@@ -66,6 +66,7 @@ const Discover = ({navigation}) => {
     .then(re => re.json())
     .then((re) => {
       SetAiring(re.data);
+      console.log(airingNow);
 
   })
   },[]);
