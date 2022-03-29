@@ -10,6 +10,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Button, Overlay, Icon } from 'react-native-elements';
 import { TextInput } from "react-native-paper";
 import { Avatar } from 'react-native-paper';
+import { getDatabase } from "firebase/database";
 
 
 const { width,height } = Dimensions.get("screen");
@@ -21,6 +22,7 @@ const wait = (timeout) => {
   }
 
 const Discuss = ({route,navigation}) => {
+  const database = getDatabase();
   const db = getFirestore();
   const [search, setSearch] = React.useState([]);
   const [temp, setTemp] = React.useState([])
@@ -36,6 +38,13 @@ const Discuss = ({route,navigation}) => {
 
     React.useCallback(()=>{
       const fetchData = async () => {
+        const db = getDatabase();
+        const starCountRef = ref(db, `https://anivice-dea7e-default-rtdb.firebaseio.com/discussionData`);
+        onValue(starCountRef, (snapshot) => {
+          const data = snapshot.val();
+      console.log(postElement, data);
+});
+        /*
         const snap = await getDoc(doc(db,"Discussions",discussId));
         setsnapNum(snap.data().commentNum);
         //console.log(discussId)
@@ -59,13 +68,14 @@ const Discuss = ({route,navigation}) => {
             return;
           }
         });
+        */
     }
 
     fetchData();
 
     },[]));
 
-
+/*
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         wait(2000).then(() => 
@@ -98,7 +108,7 @@ const Discuss = ({route,navigation}) => {
             setRefreshing(false);
           });
       }, []);
-
+*/
 
 
     
@@ -131,8 +141,8 @@ const Discuss = ({route,navigation}) => {
                 ListHeaderComponent={() =><ItemSeparator height={20}/>}
                 ListFooterComponent={() =><ItemSeparator height={30}/>}
                 keyExtractor={(item) => String(item.commentId)}
-                refreshing={refreshing}
-                onRefresh={onRefresh}
+                //refreshing={refreshing}
+                //onRefresh={onRefresh}
                 renderItem={({item,index}) => (
                
                 <View style={styles.container5}>
