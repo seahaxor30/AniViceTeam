@@ -47,8 +47,12 @@ const CreateDiscuss = ({navigation}) => {
             uid: uid,
             text: discussion,
             color: color,
-            createdAt: dateTime,
-            comments:[""]
+            createdAt: dateTime//,
+            // comments:[{
+            //         text:"",
+            //         uid:"",
+            //         createdAt:""
+            // }]
         };
       
 
