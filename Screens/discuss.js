@@ -10,7 +10,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Button, Overlay, Icon } from 'react-native-elements';
 import { TextInput } from "react-native-paper";
 import { Avatar } from 'react-native-paper';
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, onValue, child, get, set} from "firebase/database";
 
 
 const { width,height } = Dimensions.get("screen");
@@ -29,86 +29,48 @@ const Discuss = ({route,navigation}) => {
   const [snapNum, setsnapNum] = React.useState(0)
   const [title,setTitle] = React.useState("")
   var num = 0;
-  const {discussId,discussText,commentNum,color} = route.params;
+  const {discussId,discussText,createdAt,color,uid,comments} = route.params;
   const [visible, setVisible] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);  
+  const [data, setData] = React.useState([]);
 
-    
+  //console.log(comments)
+   
+
+
   useFocusEffect(
-
     React.useCallback(()=>{
       const fetchData = async () => {
-        const db = getDatabase();
-        const starCountRef = ref(db, `https://anivice-dea7e-default-rtdb.firebaseio.com/discussionData`);
-        onValue(starCountRef, (snapshot) => {
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `discussionData/`+discussId+'/comments')).then((snapshot) => {
+        if (snapshot.exists()) {
+          let queryArray = [];
           const data = snapshot.val();
-      console.log(postElement, data);
-});
-        /*
-        const snap = await getDoc(doc(db,"Discussions",discussId));
-        setsnapNum(snap.data().commentNum);
-        //console.log(discussId)
-        //num = snap.data().recNum
-        await getDocs(query(collection(db, `Discussions/${discussId}/Discuss`)))
-        .then(querySnapshot => {
-          const objectsArray = [];
-          querySnapshot.forEach(doc => {
-              objectsArray.push(doc.data());
-          });
-          console.log("yo"+ snapNum);
-          console.log("hi" + search.length)
-          if (search.length != snapNum && search.length != 0 ){
-            setSearch([...search, ...objectsArray])
+          for (var i in data) {
+            queryArray.push({
+              commentId: data[i]["commentId"],
+              commentText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"]
+            });
           }
-          else if (search.length == 0) {
-            setSearch([...search, ...objectsArray])
-            console.log(search)
-          }
-          else{
-            return;
-          }
+      //console.log(queryArray)
+      setSearch(queryArray);
+      //console.log(queryArray)
+      //console.log("search: "+ search)
+        } else {
+          console.log("No data available");
+          //No comments to display
+        }
+      }).catch((error) => {
+          console.error(error);
         });
-        */
-    }
+      }
 
-    fetchData();
+  fetchData();
 
-    },[]));
+},[]));
 
-/*
-    const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        wait(2000).then(() => 
-          {
-            //fetchData();
-            const fetchData = async () => {
-              const snap = await getDoc(doc(db,"Discussions",discussId));
-              setsnapNum(snap.data().commentNum);
-              //num = snap.data().recNum
-              await getDocs(query(collection(db, `Discussions/${discussId}/Discuss`)))
-              .then(querySnapshot => {
-                const objectsArray = [];
-                querySnapshot.forEach(doc => {
-                    objectsArray.push(doc.data());
-                });
-                console.log("yo"+ snapNum);
-                console.log("hi" + search.length)
-                if (search.length != snapNum && search.length != 0 ){
-                  setSearch([...search, ...objectsArray])
-                }
-                else if (search.length == 0) {
-                  setSearch([...search, ...objectsArray])
-                }
-                else{
-                  return;
-                }
-              });
-          };
-            fetchData();
-            setRefreshing(false);
-          });
-      }, []);
-*/
 
 
     
@@ -122,13 +84,14 @@ const Discuss = ({route,navigation}) => {
         {discussText} 
     </Text>
     </View>
+
     <View>
-        {snapNum == 1 && 
+        {/* {snapNum == 1 && 
             <Text> {snapNum} Comment </Text>
         }
         {snapNum != 1 && 
             <Text>{snapNum} Comments </Text>
-        }   
+        }    */}
         
 
     </View>
@@ -144,7 +107,6 @@ const Discuss = ({route,navigation}) => {
                 //refreshing={refreshing}
                 //onRefresh={onRefresh}
                 renderItem={({item,index}) => (
-               
                 <View style={styles.container5}>
                 <View style={styles.box}>
                 <Text style = {styles.container3}>
@@ -170,7 +132,6 @@ const Discuss = ({route,navigation}) => {
                 onPress={() => {
                   navigation.navigate("Create Comment",{
                       discussId: discussId
-  
                     })
 
                 }}
