@@ -60,62 +60,7 @@ const DiscussionsTab = ({navigation}) => {
 },[]));
 
   
-  /*
-  useFocusEffect(
-    React.useCallback(()=>{
-      const fetchData = async () => {
-        const snap = await getDoc(doc(db, 'DiscussNum','DiscussNum'));
-        num = snap.data().discussNum
-        await getDocs(query(collection(db, 'Discussions')))
-        .then(querySnapshot => {
-          const objectsArray = [];
-          querySnapshot.forEach(doc => {
-              objectsArray.push(doc.data());
-          });
-          console.log("yo"+ num);
-          console.log("hi" + search.length)
-          if (search.length != num && search.length != 0 ){
-            setSearch([...search, ...objectsArray])
-          }
-          else if (search.length == 0) {
-            setSearch([...search, ...objectsArray])
-          }
-          else{
-            return;
-          }
-        });
-    }
-    */
-    /*
-    React.useCallback(()=>{
-      const fetchData = async () => {
-        //const snap = await getDoc(doc(db, 'DiscussNum','DiscussNum'));
-        //num = snap.data().discussNum
-        const dbRef = ref(getDatabase());    
-        await get(child(dbRef, `discussionData`))
-        .then(querySnapshot => {
-          const objectsArray = [];
-          objectsArray.push(querySnapshot);
-          console.log("yo"+ num);
-          console.log("hi" + search.length)
-          setSearch(objectsArray);
-          console.log(objectsArray)
-          if (search.length != num && search.length != 0 ){
-            setSearch([...search, ...objectsArray])
-          }
-          else if (search.length == 0) {
-            setSearch([...search, ...objectsArray])
-          }
-          else{
-            return;
-          }
-        });
-    }
 
-    fetchData();
-
-    },[]));
-    */
 
 
     const onRefresh = React.useCallback(() => {
@@ -170,10 +115,12 @@ const DiscussionsTab = ({navigation}) => {
                 <TouchableOpacity onPress={(item) => {
                     navigation.navigate("Discuss",
                     {
-                      discussText: data[index]["text"],
-                      //discussId: data[index]["discussId"],
-                      //commentNum: data[index]["commentNum"],
-                      color: data[index]["color"]
+                      discussText: data[index]["discussText"],
+                      discussId: data[index]["did"],
+                      createdAt: data[index]["createdAt"],
+                      color: data[index]["color"],
+                      uid: data[index]["uid"],
+                      comments: data[index]["comments"]
                     });
                 }
               }>
