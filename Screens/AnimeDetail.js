@@ -25,7 +25,7 @@ React.useEffect(() => {
 	setCommunityScore("Loading");
     getData();
   }, []);
-
+x
 const getData =  async() => {
 	const response = await fetch(`https://api.jikan.moe/v4/anime/`+(itemid)+`/statistics`);
 	const data = await response.json();
