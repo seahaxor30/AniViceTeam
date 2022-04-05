@@ -5,6 +5,7 @@ import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc,query } 
 import { FAB } from 'react-native-elements';
 import { useFocusEffect } from "@react-navigation/native";
 import { authenication } from "../firebase";
+import { getDatabase, ref, onValue, child, get} from "firebase/database";
 
 const { width,height } = Dimensions.get("screen");
 
@@ -23,37 +24,44 @@ const DiscussionsTab = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);  
   var num = 0;
   const currUser = authenication.currentUser;
-  
-    
-  useFocusEffect(
+  const [data, setData] = React.useState([]);
 
+  
+  useFocusEffect(
     React.useCallback(()=>{
       const fetchData = async () => {
-        const snap = await getDoc(doc(db, 'DiscussNum','DiscussNum'));
-        num = snap.data().discussNum
-        await getDocs(query(collection(db, 'Discussions')))
-        .then(querySnapshot => {
-          const objectsArray = [];
-          querySnapshot.forEach(doc => {
-              objectsArray.push(doc.data());
-          });
-          console.log("yo"+ num);
-          console.log("hi" + search.length)
-          if (search.length != num && search.length != 0 ){
-            setSearch([...search, ...objectsArray])
+        //const objectsArray = [];
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `discussionData`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          let queryArray = [];
+          const data = snapshot.val();
+          for (var i in data) {
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              comments: data[i]["comments"],
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"]
+            });
           }
-          else if (search.length == 0) {
-            setSearch([...search, ...objectsArray])
-          }
-          else{
-            return;
-          }
+      setData(queryArray);
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+          console.error(error);
         });
-    }
+      }
 
-    fetchData();
+  fetchData();
 
-    },[]));
+},[]));
+
+  
+
+
 
     const onRefresh = React.useCallback(() => {
       setRefreshing(true);
@@ -82,9 +90,11 @@ const DiscussionsTab = ({navigation}) => {
             });
         };
           fetchData();
+          console.log(search);
           setRefreshing(false);
         });
     }, []);
+
 
 
   const navigater = () => {
@@ -94,22 +104,23 @@ const DiscussionsTab = ({navigation}) => {
   return (
     <View style={styles.root}> 
       <FlatList style={{height:"100%"}} 
-                data={search}
+                data={data}
                 ItemSeparatorComponent={() =><ItemSeparator height={20}width={20}/>}
                 ListHeaderComponent={() =><ItemSeparator height={5}/>}
                 ListFooterComponent={() =><ItemSeparator height={30}/>}
-                keyExtractor={(item) => String(item.discussId)}
+                keyExtractor={(item) => String(item.did)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 renderItem={({item,index}) => (
                 <TouchableOpacity onPress={(item) => {
-
                     navigation.navigate("Discuss",
                     {
-                      discussText: search[index]["discussText"],
-                      discussId: search[index]["discussId"],
-                      commentNum: search[index]["commentNum"],
-                      color: search[index]["color"]
+                      discussText: data[index]["discussText"],
+                      discussId: data[index]["did"],
+                      createdAt: data[index]["createdAt"],
+                      color: data[index]["color"],
+                      uid: data[index]["uid"],
+                      comments: data[index]["comments"]
                     });
                 }
               }>

@@ -58,6 +58,9 @@ const CreateRec = ({navigation}) => {
             await updateDoc(doc(db,"Users",currUser.uid),{
                 postNum: newPostNum
             });
+            await updateDoc(doc(db,"Last Post","Last Post"), {
+                postId: postId,
+            });
 
         }
         const addPostNum = async () => {
