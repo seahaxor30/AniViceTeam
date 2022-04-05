@@ -160,6 +160,7 @@ const  SignUpScreen = ({navigation}) =>{
           }
               
             <TextInput
+                secureTextEntry={true}
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
