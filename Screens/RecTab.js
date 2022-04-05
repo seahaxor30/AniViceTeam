@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,SafeAreaView,FlatList,Image,Dimensions,ScrollView} from "react-native";
 import ItemSeparator from "../components/ItemSeperator";
-import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc,query } from "firebase/firestore"
+import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc,query, onSnapshot } from "firebase/firestore"
 import { FAB } from 'react-native-elements';
 import { useFocusEffect } from "@react-navigation/native";
 import { authenication } from "../firebase";
@@ -20,60 +20,68 @@ const RecommendationsTab = ({navigation}) => {
   const [search, setSearch] = React.useState([]);
   const [temp, setTemp] = React.useState([])
   const [snapNum, setsnapNum] = React.useState(0)
+  //const [lastDoc,setLastDoc] = React.useState([])
   const [refreshing, setRefreshing] = React.useState(false);  
   var num = 0;
   const currUser = authenication.currentUser;
+
   
     
-  useFocusEffect(
+  //useFocusEffect(
 
-    React.useCallback(()=>{
-      const fetchData = async () => {
-        const snap = await getDoc(doc(db, 'PostNum','PostNum'));
-        num = snap.data().postNum
-        await getDocs(query(collection(db, 'Posts')))
-        .then(querySnapshot => {
-          const objectsArray = [];
-          querySnapshot.forEach(doc => {
-              objectsArray.push(doc.data());
-          });
-          console.log("yo"+ num);
-          console.log("hi" + search.length)
-          if (search.length != num && search.length != 0 ){
-            setSearch([...search, ...objectsArray])
-          }
-          else if (search.length == 0) {
-            setSearch([...search, ...objectsArray])
-          }
-          else{
-            return;
-          }
-        });
-    }
+  ////  React.useCallback(()=>{
+      
+  ////    fetchData();
+  ////  },[])
+  ////);
+  //React.useCallback(() => {
+  //  const q = query(collection(db, "Posts"));
+  //  const unsubscribe = onSnapshot(q, (snapshot) => {
+  //    const objectsArray = [];
+  //    snapshot.docChanges().forEach((change) => {
+  //    if (change.type === "added") {
+  //      objectsArray.push(change.doc.data());
+  //      setSearch([...search, ...objectsArray]);
+  //    }
+  //    if (change.type === "modified") {
+  //      objectsArray.push(change.doc.data());
+  //    }
+  //    });
+  //    }
+  //    );
+  //},[]));
 
-    //const checkData = async () => {
-    //  const snap = await getDoc(doc(db, 'PostNum','PostNum'));
-    //  num = snap.data().postNum
-    //  console.log("yo"+ num);
-    //  if (search.length != snapNum){
-    //    fetchData()
-    //  }
-    //  if (search.length == 0) {
-    //    fetchData()
-    //  }
-    //  else{
-    //    return;
-    //  }
-    //}
-    //checkData();
+
+  React.useEffect(() =>{
     fetchData();
+  },[]);
+  
+  const fetchData = () => {
+    const q = query(collection(db, "Posts"));
+    onSnapshot(q, (querySnapshot) =>  {
+      let temp = [];
+      const data = querySnapshot.val();
+      for (var i in data) {
+        temp.push({
+          color: data[i]["color"],
+          postId: data[i]["postId"],
+          postText: data[i]["postText"],
+          recNum: data[i]["recNum"],
+          uid: data[i]["uid"]
+          //user: {
+          //  _id: data[i]["user"]["_id"],
+          //  name: data[i]["user"]["name"],
+          //  avatar: data[i]["user"]["avatar"],
+          //},
 
-    },[])
-
-    
-    
-    
-    );
+        });
+      }
+      //temp.sort(
+      //  (a, b) => Date.parse(b["createdAt"]) - Date.parse(a["createdAt"])
+      //);
+      setSearch(temp);
+    });
+  };
 
     const onRefresh = React.useCallback(() => {
       setRefreshing(true);
