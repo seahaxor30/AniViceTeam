@@ -55,11 +55,13 @@ const Discuss = ({route,navigation}) => {
             });
           }
       //console.log(queryArray)
+      setsnapNum(queryArray.length)
       setSearch(queryArray);
       //console.log(queryArray)
       //console.log("search: "+ search)
         } else {
           console.log("No data available");
+          setsnapNum(0);
           //No comments to display
         }
       }).catch((error) => {
@@ -86,12 +88,12 @@ const Discuss = ({route,navigation}) => {
     </View>
 
     <View>
-        {/* {snapNum == 1 && 
+        {snapNum == 1 && 
             <Text> {snapNum} Comment </Text>
         }
         {snapNum != 1 && 
             <Text>{snapNum} Comments </Text>
-        }    */}
+        }    
         
 
     </View>
