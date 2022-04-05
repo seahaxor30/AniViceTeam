@@ -22,6 +22,14 @@ import UserRecommend from './Screens/UserRecommend';
 import CreateDiscuss from './Screens/createDiscuss';
 import Discuss from './Screens/discuss';
 import CreateComment from './Screens/createComment';
+import { LogBox } from 'react-native';
+
+// Ignore log notification by message
+LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+
+//Ignore all log notifications
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 

@@ -3,6 +3,8 @@ import React from 'react'
 import { authenication } from "../firebase";
 import { FAB } from 'react-native-elements';
 import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc } from "firebase/firestore"
+import { getDatabase, ref, onValue, child, update, push, get} from "firebase/database";
+
 
 const CreateDiscuss = ({navigation}) => {
     const currUser = authenication.currentUser;
@@ -12,6 +14,57 @@ const CreateDiscuss = ({navigation}) => {
     const [discussion, setDiscussion] = React.useState()
     const [discussNum, setDiscussNum] = React.useState(0)
     const [num, setNum] =  React.useState(0)
+
+
+    const writeNewPost = async ()=> {
+        const db = getDatabase();
+        const dbRef = ref(getDatabase());
+
+        var randNumber = Math.floor(Math.random() * 10);
+        var colorList =  ["#64B0A5","#F3CA3E","#FF3366","#3399FF","#64B075","#CA6CC1","#33E1FF","#FF5F58","#828282","#2AC940","#7C6DF7"];
+        var color = colorList[randNumber];
+        var uid = currUser.uid;
+
+        let current = new Date();
+        let cDate = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
+        let cTime = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+        let dateTime = cDate + ' ' + cTime;
+
+        var disNum = 0;
+      
+        // Get a key for a new Post.
+        const did = push(child(ref(db), 'discussionData')).key;
+
+        await get(child(dbRef, `discussionData`)).then((snapshot) => {
+        disNum = snapshot.size;
+        }).catch((error) => {
+            console.error(error);
+            });
+
+          // A post entry.
+          const postData = {
+            did: did,
+            uid: uid,
+            text: discussion,
+            color: color,
+            createdAt: dateTime//,
+            // comments:[{
+            //         text:"",
+            //         uid:"",
+            //         createdAt:""
+            // }]
+        };
+      
+
+        // Write the new post's data simultaneously in the posts list and the user's post list.
+        const updates = {};
+        updates['/discussionData/' + did] = postData;
+        updates['/DiscussNum/'] = disNum+1;
+
+        //console.log(updates);
+        navigation.goBack()
+        return update(ref(db), updates);
+      }
     
     React.useEffect(() => {
         const fetchData = async () => {
@@ -101,7 +154,8 @@ const CreateDiscuss = ({navigation}) => {
         icon={{ name: 'add', color: 'white' }} 
         size = "large"
         style={{marginBottom:"10%"}}
-        onPress={() => CreateDiscussion(discussion)}
+        onPress={() => writeNewPost()}
+        //onPress={() => CreateDiscussion(discussion)}
         //onPress={() =>navigation.navigate("Create Recommendation")}
         />
         </View>
