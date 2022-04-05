@@ -105,16 +105,11 @@ const saveCard = async (key,value) => {
             </TouchableOpacity>
     </View>
     <View style={{margin:"5%",alignContent:"center",justifyContent:"center"}}> 
-<<<<<<< HEAD
-        <Text style={{marginTop:"2%",fontSize:25,fontWeight:"bold"}}>
-          Synopsis
-=======
         <Text style={{marginTop:"2%",fontSize:20,fontWeight:"bold"}}>
 			Community Score: {communityScore}
 			
->>>>>>> b657a43a2512e46fc19e22c0fb59a1db99454249
         </Text>
-		<Text style={{marginTop:"2%",fontSize:20,fontWeight:"bold"}}>
+		<Text style={{marginTop:"2%",fontSize:25,fontWeight:"bold"}}>
 			Synopsis
 		</Text>
           <Text style={styles.itemText}>
