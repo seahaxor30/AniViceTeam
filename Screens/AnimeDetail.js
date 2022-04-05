@@ -38,7 +38,7 @@ const saveCard = async (key,value) => {
             source={{ uri: itemUrl}}
             style={styles.itemPhoto}
             
-            resizeMode="stretch">
+            resizeMode="cover">
 
             
         </Image>
@@ -62,7 +62,7 @@ const saveCard = async (key,value) => {
             </TouchableOpacity>
     </View>
     <View style={{margin:"5%",alignContent:"center",justifyContent:"center"}}> 
-        <Text style={{marginTop:"2%",fontSize:20,fontWeight:"bold"}}>
+        <Text style={{marginTop:"2%",fontSize:25,fontWeight:"bold"}}>
           Synopsis
         </Text>
         <Text style={styles.itemText}>
