@@ -7,6 +7,7 @@ import { authenication } from "../firebase";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import Toast from 'react-native-toast-message';
 import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc } from "firebase/firestore"
+import { Touchable } from "react-native-web";
 
 
 
@@ -21,6 +22,8 @@ const  SignUpScreen = ({navigation}) =>{
     const [passwordError, setPasswordError] = React.useState("");
     const [nameError, setNameError] = React.useState("");
     const [isSignedin, setSignedin] = React.useState(false);
+
+    const [isSecureEntryEnabled, setIsSecureEntryEnabled]=React.useState(true);
 
     const SignUpUser = () =>{
       var nameValid = false;
@@ -160,10 +163,17 @@ const  SignUpScreen = ({navigation}) =>{
           }
               
             <TextInput
-                secureTextEntry={true}
+                secureTextEntry={isSecureEntryEnabled}
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
+                icon={<TouchableOpacity onPress={()=>{
+                  setIsSecureEntryEnabled((prev) => !prev)
+                }}>
+                  <Text>Show/Hide</Text>
+                </TouchableOpacity>
+                }
+                iconPosition="right"
                 onFocus={ () => setPasswordError("") }
 
                 onChangeText={text => setPassword(text)}>
