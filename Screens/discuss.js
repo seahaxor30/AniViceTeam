@@ -29,7 +29,7 @@ const Discuss = ({route,navigation}) => {
   const [snapNum, setsnapNum] = React.useState(0)
   const [title,setTitle] = React.useState("")
   var num = 0;
-  const {discussId,discussText,createdAt,color,uid,comments} = route.params;
+  const {discussId,discussText,color} = route.params;
   const [visible, setVisible] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);  
   const [data, setData] = React.useState([]);
@@ -51,7 +51,8 @@ const Discuss = ({route,navigation}) => {
               commentId: data[i]["commentId"],
               commentText: data[i]["text"],
               createdAt: data[i]["createdAt"],
-              uid: data[i]["uid"]
+              uid: data[i]["uid"],
+              userUrl: data[i]["photoURL"]
             });
           }
       //console.log(queryArray)
@@ -88,11 +89,11 @@ const Discuss = ({route,navigation}) => {
     </View>
 
     <View>
-        {snapNum == 1 && 
-            <Text> {snapNum} Comment </Text>
+        {search.length == 1 && 
+            <Text> {search.length} Comment </Text>
         }
-        {snapNum != 1 && 
-            <Text>{snapNum} Comments </Text>
+        {search.length != 1 && 
+            <Text>{search.length} Comments </Text>
         }    
         
 
