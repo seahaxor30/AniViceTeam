@@ -37,14 +37,33 @@ const DiscussionsTab = ({navigation}) => {
           let queryArray = [];
           const data = snapshot.val();
           for (var i in data) {
+            //if there are comments
+            if (data[i]["comments"] != undefined){
             queryArray.push({
               did: data[i]["did"],
               color: data[i]["color"],
-              comments: data[i]["comments"],
+              comments: data[i]["comments"].length,
               discussText: data[i]["text"],
               createdAt: data[i]["createdAt"],
-              uid: data[i]["uid"]
+              uid: data[i]["uid"],
+              commentNum: data[i]["comments"].length
             });
+          }else{
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: 0
+          })
+        }
+            //console.log(data[i]["comments"]) gets all the comments from every post 
+            // get(child(dbRef, `discussionData/`+data[i][""]+'/comments')).then((snapshot) => {
+            //   setsnapNum(queryArray.length)
+            // }).catch((error) => {
+            //   console.error(error);
+            // });
           }
       setData(queryArray);
         } else {
@@ -68,26 +87,43 @@ const DiscussionsTab = ({navigation}) => {
       wait(2000).then(() => 
         {
           const fetchData = async () => {
-            const snap = await getDoc(doc(db, 'DiscussNum','DiscussNum'));
-            num = snap.data().discussNum
-            await getDocs(query(collection(db, 'Discussions')))
-            .then(querySnapshot => {
-              const objectsArray = [];
-              querySnapshot.forEach(doc => {
-                  objectsArray.push(doc.data());
-              });
-              console.log("yo"+ num);
-              console.log("hi" + search.length)
-              if (search.length != num && search.length != 0 ){
-                setSearch([...search, ...objectsArray])
-              }
-              else if (search.length == 0) {
-                setSearch([...search, ...objectsArray])
-              }
-              else{
-                return;
-              }
+            //const objectsArray = [];
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `discussionData`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          let queryArray = [];
+          const data = snapshot.val();
+          for (var i in data) {
+            //if there are comments
+            if (data[i]["comments"] != undefined){
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              comments: data[i]["comments"].length,
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: data[i]["comments"].length
             });
+          }else{
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: 0
+          })
+        }
+          }
+      setData(queryArray);
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+          console.error(error);
+        });
+        
         };
           fetchData();
           console.log(search);
