@@ -171,13 +171,13 @@ const DiscussionsTab = ({navigation}) => {
                   </Text>
                 </View>
                   <View style={{backgroundColor:"white",borderBottomEndRadius:12,borderBottomStartRadius:12,height:setHeight(5),width:"100%",top:"80%",alignItems:"center",position:"absolute",justifyContent:"center"}}>
-                  {item.recNum == 1 && 
-                    <Text style={{fontSize: 20,fontWeight: "bold",padding:20}}>
+                  {item.commentNum == 1 && 
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
                       {item.commentNum} Comment
                     </Text>
                   }
-                  {item.recNum != 1 && 
-                    <Text style={{fontSize: 20,fontWeight: "bold",padding:10}}>
+                  {item.commentNum != 1 && 
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
                       {item.commentNum} Comments
                     </Text>
                   } 
