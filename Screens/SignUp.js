@@ -24,6 +24,7 @@ const  SignUpScreen = ({navigation}) =>{
     const [isSignedin, setSignedin] = React.useState(false);
 
     const [isSecureEntryEnabled, setIsSecureEntryEnabled]=React.useState(true);
+    const [eyeButton, setEyeButton]=React.useState("eye-off");
 
     const SignUpUser = () =>{
       var nameValid = false;
@@ -116,10 +117,23 @@ const  SignUpScreen = ({navigation}) =>{
     setName("")
     
   }
+
+  const changeSecureText = () => {
+    if (isSecureEntryEnabled) {
+      setIsSecureEntryEnabled(false);
+      setEyeButton ("eye");
+      return;
+    }
+    else if (isSecureEntryEnabled == false) {
+      setIsSecureEntryEnabled(true);
+      setEyeButton ("eye-off");
+      return;
+    }
+  }
     
   return( 
 
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         
         <SafeAreaView style = {styles.safearea}>
             <View style={{marginBottom:60}}>
@@ -159,28 +173,23 @@ const  SignUpScreen = ({navigation}) =>{
             <View>
             {passwordError.length > 0 &&
             
-            <Text style={{color:"red",marginStart:10}}>{passwordError}</Text>
-          }
+            <Text style={{color:"red",marginStart:10}}>{passwordError}</Text>}
               
             <TextInput
                 secureTextEntry={isSecureEntryEnabled}
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
-                icon={<TouchableOpacity onPress={()=>{
-                  setIsSecureEntryEnabled((prev) => !prev)
-                }}>
-                  <Text>Show/Hide</Text>
-                </TouchableOpacity>
-                }
-                iconPosition="right"
+                right={<TextInput.Icon name={eyeButton} 
+                        onPress={ () => changeSecureText()}
+                />}
                 onFocus={ () => setPasswordError("") }
 
                 onChangeText={text => setPassword(text)}>
             </TextInput>
             </View>
+            
             <View style={{marginTop: 20,width:"50%"}}>
-
             <TouchableOpacity style={styles.button}
             onPress={SignUpUser}>
             <Text style={styles.buttonText}>Sign Up</Text>

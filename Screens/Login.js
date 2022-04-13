@@ -16,6 +16,8 @@ const  LoginScreen = ({navigation}) =>{
     const [password, setPassword] = React.useState('');
     const [emailError, setEmailError] = React.useState("");
     const [passwordError, setPasswordError] = React.useState("");
+    const [isSecureEntryEnabled, setIsSecureEntryEnabled]=React.useState(true);
+    const [eyeButton, setEyeButton]=React.useState("eye-off");
     //const [isSignedin, setSignedin] = React.useState(false);
 
     const LoginUser = () =>{     
@@ -80,6 +82,19 @@ const  LoginScreen = ({navigation}) =>{
     
   }
 
+  const changeSecureText = () => {
+    if (isSecureEntryEnabled) {
+      setIsSecureEntryEnabled(false);
+      setEyeButton ("eye");
+      return;
+    }
+    else if (isSecureEntryEnabled == false) {
+      setIsSecureEntryEnabled(true);
+      setEyeButton ("eye-off");
+      return;
+    }
+  }
+
     React.useEffect(()=>{
         const unsubscribe = authenication.onAuthStateChanged(user=>{
             if (user) {
@@ -97,7 +112,7 @@ const  LoginScreen = ({navigation}) =>{
     
     return(
 
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
             
             
             <SafeAreaView style = {styles.safearea}>
@@ -127,10 +142,13 @@ const  LoginScreen = ({navigation}) =>{
           }
               
             <TextInput
-                secureTextEntry-={true}
+                secureTextEntry={isSecureEntryEnabled}
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
+                right={<TextInput.Icon name={eyeButton}
+                  onPress={() => changeSecureText}
+               />}
                 onFocus={ () => setPasswordError("") }
 
                 onChangeText={text => setPassword(text)}>
