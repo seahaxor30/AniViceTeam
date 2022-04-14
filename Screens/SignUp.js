@@ -107,8 +107,8 @@ const  SignUpScreen = ({navigation}) =>{
   
   const loginNavigate = () => {
     navigation.navigate("Login")
-    setCheck(true);
-    setEyeCheck("eye-off")
+    setIsSecureEntryEnabled(true);
+    setEyeButton("eye-off");
     setEmailError("")
     setNameError("")
     setPasswordError("")

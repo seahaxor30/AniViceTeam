@@ -75,8 +75,8 @@ const  LoginScreen = ({navigation}) =>{
   }
   const backToSignUp = () => {
     navigation.navigate("Sign Up")
-    setCheck(true);
-    setEyeCheck("eye-off")
+    setIsSecureEntryEnabled(true);
+    setEyeButton("eye-off");
     setEmailError("")
     setPasswordError("")
     setEmail("")
