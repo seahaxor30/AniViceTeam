@@ -92,93 +92,7 @@ const  ProfileScreen = ({navigation}) =>{
   const [refreshing, setRefreshing] = React.useState(false);  
   var num = 0;
   
-    
-  //useFocusEffect(
 
-  //  React.useCallback(()=>{
-  //    const fetchData = async () => {
-  //      const currUser = authenication.currentUser;
-  //      const snap = await getDoc(doc(db, 'PostNum','PostNum'));
-  //      num = snap.data().postNum
-  //      const q = query(collection(db, "Posts"), where("uid", "==", currUser.uid));
-        //await getDocs(query(collection(db, "Posts"), where("uid", "==", currUser.uid)))
-  //      .then(querySnapshot => {
-  //        const objectsArray = [];
-  //        querySnapshot.forEach(doc => {
-  //            objectsArray.push(doc.data());
-  //        });
-  //        console.log("yo"+ num);
-  //        console.log("hi" + posts.length)
-  //        if (posts.length != num && posts.length != 0 ){
-  //          setPosts([...posts, ...objectsArray])
-  //        }
-  //        else if (posts.length == 0) {
-  //          setPosts([...posts, ...objectsArray])
-  //        }
-  //        else{
-  //          return;
-  //        }
-  //      });
-  //  }
-
-  //  //const checkData = async () => {
-  //  //  const snap = await getDoc(doc(db, 'PostNum','PostNum'));
-  //  //  num = snap.data().postNum
-  //  //  console.log("yo"+ num);
-  //  //  if (search.length != snapNum){
-  //  //    fetchData()
-  //  //  }
-  //  //  if (search.length == 0) {
-  //  //    fetchData()
-  //  //  }
-  //  //  else{
-  //  //    return;
-  //  //  }
-  //  //}
-  //  //checkData();
-  //  fetchData();
-
-  //  },[])
-
-    
-    
-    
-  //  );
-
-  //  const onRefresh = React.useCallback(() => {
-  //    setRefreshing(true);
-  //    wait(2000).then(() => 
-  //      {
-  //        //fetchData();
-  //        const fetchData = async () => {
-  //          const currUser = authenication.currentUser;
-
-  //          const snap = await getDoc(doc(db, 'PostNum','PostNum'));
-  //          num = snap.data().postNum
-            //const q = query(collection(db, "Posts"), where("uid", "==", currUser.uid));
-            //await getDocs(q)
-  //          .then(querySnapshot => {
-  //            const objectsArray = [];
-  //            querySnapshot.forEach(doc => {
-  //                objectsArray.push(doc.data());
-  //            });
-  //            console.log("yo"+ num);
-  //            console.log("hi" + posts.length)
-  //            if (posts.length != num && posts.length != 0 ){
-  //              setPosts([...posts, ...objectsArray])
-  //            }
-  //            else if (posts.length == 0) {
-  //              setPosts([...posts, ...objectsArray])
-  //            }
-  //            else{
-  //              return;
-  //            }
-  //          });
-  //      };
-  //        fetchData();
-  //        setRefreshing(false);
-  //      });
-  //  }, []);
   useFocusEffect(
 
     React.useCallback(()=>{
@@ -265,16 +179,13 @@ const  ProfileScreen = ({navigation}) =>{
     <Text>{authenication.currentUser.displayName}</Text>
     </View>
     </View>
-    <View style = {styles.view}>
-      <View style={{backgroundColor:"yellow",width:"100%"}}>
-        <TouchableOpacity style={{position:"absolute",bottom:setHeight(25),left:setWidth(30)}}
+      <View style={styles.logOutButton}>
+        <TouchableOpacity style={styles.logOutButton}
           onPress={handleSignOut}>
           <Ionicons name="log-out-outline" size={50} color="black" />
         </TouchableOpacity>
       </View>
-     
-    </View>
-    <View style={{width:"100%",height:"60%",marginTop:"5%",alignContent:"center", shadowColor: 'black',
+        <View style={{width:"100%",height:"60%",marginTop:"5%",alignContent:"center", shadowColor: 'black',
                   shadowOffset: {width: 1, height: 2},
                   shadowOpacity: 0.3,
                   elevation: 5}}>
@@ -346,35 +257,18 @@ const  ProfileScreen = ({navigation}) =>{
       borderRadius: 10,
       alignItems: 'center',
       justifyContent: 'center',
-      //marginTop: "auto",
     },
 
     buttonText: {
       color: "#FFFFFF",
       fontWeight: "bold",
     },
-    //view: {
-    //  flex: 1,
-    //  alignItems: 'center',
-    //  justifyContent:"center",
-    //},
     safearea: {
       flex: 1,
       alignItems: 'center',
       justifyContent:"center",
       backgroundColor:"#F2F2F2"
-
     },
-  //  container5:{
-  //    backgroundColor: "white",
-  //    borderRadius:12,
-  //    //margin:10,
-
-  //  //  width: setWidth(100),
-  //    height:setHeight(18)
-
-
-  //},
   title: {
     width: "100%",
     marginTop: 20,
@@ -382,62 +276,37 @@ const  ProfileScreen = ({navigation}) =>{
     fontWeight: "bold",
     marginLeft: "10%",
   },
-
   container: {
-    //margin:10,
     justifyContent: "center",
     alignItems:"center",
     borderRadius: 12,
     borderTopEndRadius:0,
     borderBottomEndRadius:0,
-
     backgroundColor: "#057DFE",
     paddingVertical: 8,
-    //marginHorizontal:4,
     bottom:147,
     width:setWidth(30), 
     height:setHeight(18)
-
-
-
-},
-container2:{
-    //margin:8,
-},
-container3:{
-    //width: "100%",
-    //marginTop: 20,
-    fontSize: 20,
-    fontWeight: "bold",
-    flex: 1, 
-    //backgroundColor:"blue",
-    height:setHeight(10),
-
-    //flexWrap: 'wrap'
-
-    //marginLeft: "10%",
-
-    //marginStart:5,
-    //marginTop:10,
-    //marginBottom:10
-
-
-},
-box:{
-    flexDirection:"row",
-    //backgroundColor: "green",
-
-    marginStart:setWidth(35),
-    //top:50
-    paddingVertical: 30,
-    alignItems: "center",
-    width:setWidth(55),
-    height:setHeight(18),
- 
-
-
-    //left:50
-}
-
-  })
+  },
+  container3:{
+      fontSize: 20,
+      fontWeight: "bold",
+      flex: 1, 
+      height:setHeight(10),
+  },
+  box:{
+      flexDirection:"row",
+      marginStart:setWidth(35),
+      paddingVertical: 30,
+      alignItems: "center",
+      width:setWidth(55),
+      height:setHeight(18),
+    },
+    logOutButton: {
+      position:"absolute",
+      bottom:setHeight(33),
+      left:setWidth(40)
+    }
+  
+});
 export default ProfileScreen;
