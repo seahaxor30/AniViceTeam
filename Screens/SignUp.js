@@ -7,6 +7,7 @@ import { authenication } from "../firebase";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import Toast from 'react-native-toast-message';
 import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc } from "firebase/firestore"
+import { Touchable } from "react-native-web";
 
 
 
@@ -21,8 +22,8 @@ const  SignUpScreen = ({navigation}) =>{
     const [passwordError, setPasswordError] = React.useState("");
     const [nameError, setNameError] = React.useState("");
     const [isSignedin, setSignedin] = React.useState(false);
-    const [check, setCheck] = React.useState(true);
-    const [eyeCheck, setEyeCheck] = React.useState("eye-off");
+    const [isSecureEntryEnabled, setIsSecureEntryEnabled]=React.useState(true);
+    const [eyeButton, setEyeButton]=React.useState("eye-off");
     const SignUpUser = () =>{
       var nameValid = false;
         if (name.length == 0){
@@ -116,29 +117,18 @@ const  SignUpScreen = ({navigation}) =>{
     setName("")
     
   }
-  //const eyeChecker = () => {
-  //  setCheck(!check);
-  //  if (check === true) {
-  //    setEyeCheck("eye");
-  //    return
-  //  }
-  //  else{
-  //    setEyeCheck("eye-off");
-  //    return
-  //  }
-  //}
-  const eyeChecker = () => {
-    if (check) {
-      setCheck(false);
-      setEyeCheck("eye")
-      return
+  const changeSecureText = () => {
+    if (isSecureEntryEnabled) {
+      setIsSecureEntryEnabled(false);
+      setEyeButton ("eye");
+      return;
     }
-    else{   
-      setCheck(true);     
-      setEyeCheck("eye-off");
-      return
+    else if (isSecureEntryEnabled == false) {
+      setIsSecureEntryEnabled(true);
+      setEyeButton ("eye-off");
+      return;
     }
-    
+
   }
     
   return( 
@@ -183,24 +173,22 @@ const  SignUpScreen = ({navigation}) =>{
             <View>
             {passwordError.length > 0 &&
             
-            <Text style={{color:"red",marginStart:10}}>{passwordError}</Text>
-          }
+            <Text style={{color:"red",marginStart:10}}>{passwordError}</Text>}
               
             <TextInput
+                secureTextEntry={isSecureEntryEnabled}
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
-                onFocus={ () => setPasswordError("")}
-                secureTextEntry = {check}
                 right={<TextInput.Icon 
-                  onPress = {() => {
-                  eyeChecker();}}
-                  name={eyeCheck}/>}
+                       name={eyeButton} 
+                       onPress={ () => changeSecureText()}/>}
+                onFocus={ () => setPasswordError("") }
                 onChangeText={text => setPassword(text)}>
             </TextInput>
             </View>
+            
             <View style={{marginTop: 20,width:"50%"}}>
-
             <TouchableOpacity style={styles.button}
             onPress={SignUpUser}>
             <Text style={styles.buttonText}>Sign Up</Text>
