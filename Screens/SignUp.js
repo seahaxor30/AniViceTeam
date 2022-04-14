@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions,Animated} from "react-native";
+import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions,Animated,Keyboard} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,10 +22,8 @@ const  SignUpScreen = ({navigation}) =>{
     const [passwordError, setPasswordError] = React.useState("");
     const [nameError, setNameError] = React.useState("");
     const [isSignedin, setSignedin] = React.useState(false);
-
     const [isSecureEntryEnabled, setIsSecureEntryEnabled]=React.useState(true);
     const [eyeButton, setEyeButton]=React.useState("eye-off");
-
     const SignUpUser = () =>{
       var nameValid = false;
         if (name.length == 0){
@@ -109,6 +107,8 @@ const  SignUpScreen = ({navigation}) =>{
   
   const loginNavigate = () => {
     navigation.navigate("Login")
+    setCheck(true);
+    setEyeCheck("eye-off")
     setEmailError("")
     setNameError("")
     setPasswordError("")
@@ -117,7 +117,6 @@ const  SignUpScreen = ({navigation}) =>{
     setName("")
     
   }
-
   const changeSecureText = () => {
     if (isSecureEntryEnabled) {
       setIsSecureEntryEnabled(false);
@@ -129,6 +128,7 @@ const  SignUpScreen = ({navigation}) =>{
       setEyeButton ("eye-off");
       return;
     }
+
   }
     
   return( 
@@ -180,11 +180,10 @@ const  SignUpScreen = ({navigation}) =>{
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
-                right={<TextInput.Icon name={eyeButton} 
-                        onPress={ () => changeSecureText()}
-                />}
+                right={<TextInput.Icon 
+                       name={eyeButton} 
+                       onPress={ () => changeSecureText()}/>}
                 onFocus={ () => setPasswordError("") }
-
                 onChangeText={text => setPassword(text)}>
             </TextInput>
             </View>

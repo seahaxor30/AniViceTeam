@@ -5,6 +5,7 @@ import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc,query } 
 import { FAB } from 'react-native-elements';
 import { useFocusEffect } from "@react-navigation/native";
 import { authenication } from "../firebase";
+import { getDatabase, ref, onValue, child, get} from "firebase/database";
 
 const { width,height } = Dimensions.get("screen");
 
@@ -23,68 +24,113 @@ const DiscussionsTab = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);  
   var num = 0;
   const currUser = authenication.currentUser;
-  
-    
-  useFocusEffect(
+  const [data, setData] = React.useState([]);
 
+  
+  useFocusEffect(
     React.useCallback(()=>{
       const fetchData = async () => {
-        const snap = await getDoc(doc(db, 'DiscussNum','DiscussNum'));
-        num = snap.data().discussNum
-        await getDocs(query(collection(db, 'Discussions')))
-        .then(querySnapshot => {
-          const objectsArray = [];
-          querySnapshot.forEach(doc => {
-              objectsArray.push(doc.data());
-          });
-          console.log("yo"+ num);
-          console.log("hi" + search.length)
-          if (search.length != num && search.length != 0 ){
-            setSearch([...search, ...objectsArray])
+        //const objectsArray = [];
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `discussionData`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          let queryArray = [];
+          const data = snapshot.val();
+          for (var i in data) {
+            //if there are comments
+            if (data[i]["comments"] != undefined){
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              comments: data[i]["comments"].length,
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: data[i]["comments"].length
+            });
+          }else{
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: 0
+          })
+        }
+            //console.log(data[i]["comments"]) gets all the comments from every post 
+            // get(child(dbRef, `discussionData/`+data[i][""]+'/comments')).then((snapshot) => {
+            //   setsnapNum(queryArray.length)
+            // }).catch((error) => {
+            //   console.error(error);
+            // });
           }
-          else if (search.length == 0) {
-            setSearch([...search, ...objectsArray])
-          }
-          else{
-            return;
-          }
+      setData(queryArray);
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+          console.error(error);
         });
-    }
+      }
 
-    fetchData();
+  fetchData();
 
-    },[]));
+},[]));
+
+  
+
+
 
     const onRefresh = React.useCallback(() => {
       setRefreshing(true);
       wait(2000).then(() => 
         {
           const fetchData = async () => {
-            const snap = await getDoc(doc(db, 'DiscussNum','DiscussNum'));
-            num = snap.data().discussNum
-            await getDocs(query(collection(db, 'Discussions')))
-            .then(querySnapshot => {
-              const objectsArray = [];
-              querySnapshot.forEach(doc => {
-                  objectsArray.push(doc.data());
-              });
-              console.log("yo"+ num);
-              console.log("hi" + search.length)
-              if (search.length != num && search.length != 0 ){
-                setSearch([...search, ...objectsArray])
-              }
-              else if (search.length == 0) {
-                setSearch([...search, ...objectsArray])
-              }
-              else{
-                return;
-              }
+            //const objectsArray = [];
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `discussionData`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          let queryArray = [];
+          const data = snapshot.val();
+          for (var i in data) {
+            //if there are comments
+            if (data[i]["comments"] != undefined){
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              comments: data[i]["comments"].length,
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: data[i]["comments"].length
             });
+          }else{
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: 0
+          })
+        }
+          }
+      setData(queryArray);
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+          console.error(error);
+        });
+        
         };
           fetchData();
+          console.log(search);
           setRefreshing(false);
         });
     }, []);
+
 
 
   const navigater = () => {
@@ -94,22 +140,23 @@ const DiscussionsTab = ({navigation}) => {
   return (
     <View style={styles.root}> 
       <FlatList style={{height:"100%"}} 
-                data={search}
+                data={data}
                 ItemSeparatorComponent={() =><ItemSeparator height={20}width={20}/>}
                 ListHeaderComponent={() =><ItemSeparator height={5}/>}
                 ListFooterComponent={() =><ItemSeparator height={30}/>}
-                keyExtractor={(item) => String(item.discussId)}
+                keyExtractor={(item) => String(item.did)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 renderItem={({item,index}) => (
                 <TouchableOpacity onPress={(item) => {
-
                     navigation.navigate("Discuss",
                     {
-                      discussText: search[index]["discussText"],
-                      discussId: search[index]["discussId"],
-                      commentNum: search[index]["commentNum"],
-                      color: search[index]["color"]
+                      discussText: data[index]["discussText"],
+                      discussId: data[index]["did"],
+                      createdAt: data[index]["createdAt"],
+                      color: data[index]["color"],
+                      uid: data[index]["uid"],
+                      comments: data[index]["comments"]
                     });
                 }
               }>
@@ -124,13 +171,13 @@ const DiscussionsTab = ({navigation}) => {
                   </Text>
                 </View>
                   <View style={{backgroundColor:"white",borderBottomEndRadius:12,borderBottomStartRadius:12,height:setHeight(5),width:"100%",top:"80%",alignItems:"center",position:"absolute",justifyContent:"center"}}>
-                  {item.recNum == 1 && 
-                    <Text style={{fontSize: 20,fontWeight: "bold",padding:20}}>
+                  {item.commentNum == 1 && 
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
                       {item.commentNum} Comment
                     </Text>
                   }
-                  {item.recNum != 1 && 
-                    <Text style={{fontSize: 20,fontWeight: "bold",padding:10}}>
+                  {item.commentNum != 1 && 
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
                       {item.commentNum} Comments
                     </Text>
                   } 
