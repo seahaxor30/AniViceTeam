@@ -109,19 +109,6 @@ const  LoginScreen = ({navigation}) =>{
 
         return unsubscribe;
     },[]);
-    const eyeChecker = () => {
-      if (check) {
-        setCheck(false);
-        setEyeCheck("eye")
-        return
-      }
-      else{   
-        setCheck(true);     
-        setEyeCheck("eye-off");
-        return
-      }
-      
-    }
     
 
     
