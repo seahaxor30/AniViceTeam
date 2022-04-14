@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions,Animated} from "react-native";
+import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions,Animated,Keyboard} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,7 +21,8 @@ const  SignUpScreen = ({navigation}) =>{
     const [passwordError, setPasswordError] = React.useState("");
     const [nameError, setNameError] = React.useState("");
     const [isSignedin, setSignedin] = React.useState(false);
-
+    const [check, setCheck] = React.useState(true);
+    const [eyeCheck, setEyeCheck] = React.useState("eye-off");
     const SignUpUser = () =>{
       var nameValid = false;
         if (name.length == 0){
@@ -105,6 +106,8 @@ const  SignUpScreen = ({navigation}) =>{
   
   const loginNavigate = () => {
     navigation.navigate("Login")
+    setCheck(true);
+    setEyeCheck("eye-off")
     setEmailError("")
     setNameError("")
     setPasswordError("")
@@ -113,10 +116,34 @@ const  SignUpScreen = ({navigation}) =>{
     setName("")
     
   }
+  //const eyeChecker = () => {
+  //  setCheck(!check);
+  //  if (check === true) {
+  //    setEyeCheck("eye");
+  //    return
+  //  }
+  //  else{
+  //    setEyeCheck("eye-off");
+  //    return
+  //  }
+  //}
+  const eyeChecker = () => {
+    if (check) {
+      setCheck(false);
+      setEyeCheck("eye")
+      return
+    }
+    else{   
+      setCheck(true);     
+      setEyeCheck("eye-off");
+      return
+    }
+    
+  }
     
   return( 
 
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         
         <SafeAreaView style = {styles.safearea}>
             <View style={{marginBottom:60}}>
@@ -163,8 +190,12 @@ const  SignUpScreen = ({navigation}) =>{
                 style={styles.input}
                 placeholder="Password"
                 value = {password}
-                onFocus={ () => setPasswordError("") }
-
+                onFocus={ () => setPasswordError("")}
+                secureTextEntry = {check}
+                right={<TextInput.Icon 
+                  onPress = {() => {
+                  eyeChecker();}}
+                  name={eyeCheck}/>}
                 onChangeText={text => setPassword(text)}>
             </TextInput>
             </View>

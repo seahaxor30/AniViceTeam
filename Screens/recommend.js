@@ -177,7 +177,8 @@ const Recommend = ({route,navigation}) => {
                 navigation.navigate("Anime Detail",{
                   itemSynopsis: search[index]["itemSynopsis"],
                   itemTitle: search[index]["itemTitle"],
-                  itemUrl: search[index]["itemUrl"]
+                  itemUrl: search[index]["itemUrl"],
+                  itemid: search[index]["itemid"],
 
                 });          
               }}>

@@ -16,6 +16,8 @@ const  LoginScreen = ({navigation}) =>{
     const [password, setPassword] = React.useState('');
     const [emailError, setEmailError] = React.useState("");
     const [passwordError, setPasswordError] = React.useState("");
+    const [check, setCheck] = React.useState(true);
+    const [eyeCheck, setEyeCheck] = React.useState("eye-off");
     //const [isSignedin, setSignedin] = React.useState(false);
 
     const LoginUser = () =>{     
@@ -73,6 +75,8 @@ const  LoginScreen = ({navigation}) =>{
   }
   const backToSignUp = () => {
     navigation.navigate("Sign Up")
+    setCheck(true);
+    setEyeCheck("eye-off")
     setEmailError("")
     setPasswordError("")
     setEmail("")
@@ -91,13 +95,26 @@ const  LoginScreen = ({navigation}) =>{
          
 
         return unsubscribe;
-    },[])
+    },[]);
+    const eyeChecker = () => {
+      if (check) {
+        setCheck(false);
+        setEyeCheck("eye")
+        return
+      }
+      else{   
+        setCheck(true);     
+        setEyeCheck("eye-off");
+        return
+      }
+      
+    }
     
 
     
     return(
 
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
             
             
             <SafeAreaView style = {styles.safearea}>
@@ -131,6 +148,11 @@ const  LoginScreen = ({navigation}) =>{
                 placeholder="Password"
                 value = {password}
                 onFocus={ () => setPasswordError("") }
+                secureTextEntry = {check}
+                right={<TextInput.Icon 
+                  onPress = {() => {
+                  eyeChecker();}}
+                  name={eyeCheck}/>}
 
                 onChangeText={text => setPassword(text)}>
             </TextInput>
