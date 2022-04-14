@@ -162,15 +162,9 @@ const  LoginScreen = ({navigation}) =>{
                 placeholder="Password"
                 value = {password}
                 right={<TextInput.Icon name={eyeButton}
-                  onPress={() => changeSecureText}
+                  onPress={() => changeSecureText()}
                />}
                 onFocus={ () => setPasswordError("") }
-                secureTextEntry = {check}
-                right={<TextInput.Icon 
-                  onPress = {() => {
-                  eyeChecker();}}
-                  name={eyeCheck}/>}
-
                 onChangeText={text => setPassword(text)}>
             </TextInput>
             </View>
