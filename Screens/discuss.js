@@ -75,6 +75,45 @@ const Discuss = ({route,navigation}) => {
 },[]));
 
 
+const onRefresh = React.useCallback(() => {
+  setRefreshing(true);
+  wait(2000).then(() => 
+    {
+      const fetchData = async () => {
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `discussionData/`+discussId+'/comments')).then((snapshot) => {
+        if (snapshot.exists()) {
+          let queryArray = [];
+          const data = snapshot.val();
+          for (var i in data) {
+            queryArray.push({
+              commentId: data[i]["commentId"],
+              commentText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              userUrl: data[i]["photoURL"]
+            });
+          }
+      //console.log(queryArray)
+      setsnapNum(queryArray.length)
+      setSearch(queryArray);
+      //console.log(queryArray)
+      //console.log("search: "+ search)
+        } else {
+          console.log("No data available");
+          setsnapNum(0);
+          //No comments to display
+        }
+      }).catch((error) => {
+          console.error(error);
+        });
+      }
+
+      fetchData();
+      setRefreshing(false);
+    });
+}, []);
+
 
     
     
@@ -107,8 +146,8 @@ const Discuss = ({route,navigation}) => {
                 ListHeaderComponent={() =><ItemSeparator height={20}/>}
                 ListFooterComponent={() =><ItemSeparator height={30}/>}
                 keyExtractor={(item) => String(item.commentId)}
-                //refreshing={refreshing}
-                //onRefresh={onRefresh}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
                 renderItem={({item,index}) => (
                 <View style={styles.container5}>
                 <View style={styles.box}>
