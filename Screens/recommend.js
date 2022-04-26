@@ -3,6 +3,7 @@ import { Text,View,Alert,TouchableOpacity,StyleSheet,SafeAreaView,FlatList,Image
 import List from "../components/list"
 import SearchBar from "../components/SearchBar";
 import ItemSeparator from "../components/ItemSeperator";
+import Divider from "../components/flatlistDivider";
 import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc,query } from "firebase/firestore"
 import { FAB } from 'react-native-elements';
 import { async } from "@firebase/util";
@@ -27,7 +28,7 @@ const Recommend = ({route,navigation}) => {
   const [snapNum, setsnapNum] = React.useState(0)
   const [title,setTitle] = React.useState("")
   var num = 0;
-  const {postId,postText,recNum,color} = route.params;
+  const {postId,postText,recNum,color,photoURL,name} = route.params;
   const [visible, setVisible] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);  
 
@@ -136,41 +137,68 @@ const Recommend = ({route,navigation}) => {
     //},[navigation])
 
   const navigater = () => {
-    navigation.navigate("Search Recommendation");
+    navigation.goBack();
 
   }
   return (
-    <View style={{flex: 1,backgroundColor: color,alignItems: "center",}}>
-    <View style={{width:"100%",marginTop:"20%",marginBottom:"20%",
-}}
->
-    <Text>
-        {postText} 
-    </Text>
-    </View>
+    
+    <View style={{backgroundColor:color,height:"100%"}}>
+    
+
     <View>
-        {snapNum == 1 && 
-            <Text> {snapNum} Recommendation </Text>
-        }
-        {snapNum != 1 && 
-            <Text>{snapNum} Recommendations </Text>
-        }   
-        
-
+    <View style={{width:setWidth(20),height:setHeight(4),marginTop:35,marginLeft:"77%",backgroundColor:"#057DFE",borderRadius:10,justifyContent:"center"}}>
+    <TouchableOpacity onPress={navigater}>
+      <Text style={{alignSelf:"center",color:"white",fontSize:18}}>Back</Text>
+    </TouchableOpacity>
     </View>
+    <View style={{width:"100%",flexDirection:"row"}}>
+    <View style={{width:setWidth(20),height:setHeight(7),alignItems:"center",marginTop:10,marginStart:10}}>
+      <Image
+        source={{uri: photoURL}}
+        style={{width:setWidth(15),height:setHeight(7),borderRadius:100}}
+        resizeMode="cover"/>
+      <View style={{marginTop:5}}>
+        <Text numberOfLines={1} style={{fontSize:15,fontWeight:"bold"}}>
+            {name} 
+        </Text>
+    </View>
+    </View>
+    <View style={{margin:0,width:setWidth(70),height:setHeight(30),margin:10}}>
+      <Text style={{fontSize:30,fontWeight:"500"}}>
+        {postText} 
+      </Text>
+    </View>
+    
+    </View>
+    <View style={{width:"100%",height:"60%",alignContent:"center", shadowColor: 'black',
+                  shadowOffset: {width: 1, height: 2},
+                  shadowOpacity: 0.3,
+                  elevation: 5}}>
+    <View style={{borderTopLeftRadius:30,borderTopEndRadius:30,width:"100%",backgroundColor:"white",alignItems:"center",padding:5,}}>
+    {search.length == 1 && 
+            <Text style={{fontSize:20,fontWeight:"bold"}}> {search.length} Recommendation </Text>
+        }
+        {search.length != 1 && 
+            <Text style={{fontSize:20,fontWeight:"bold"}}>{search.length} Recommendations </Text>
+        }
+    <View>
 
 
-    <View style={{backgroundColor:"#efefef",height:"58%",width:"95%",margin:20,borderRadius:10,flex:1}}>
-      <FlatList style={{margin:10}}
+    </View>  
+    </View>
+    <View style={{width:"100%",height:"100%",backgroundColor:"white"}}>
+      <FlatList
                 data={search}
-                ItemSeparatorComponent={() =><ItemSeparator height={10}width={20}/>}
-                ListHeaderComponent={() =><ItemSeparator height={20}/>}
-                ListFooterComponent={() =><ItemSeparator height={30}/>}
+                ItemSeparatorComponent={() =><Divider/>}
+                ListHeaderComponent={() =><ItemSeparator height={0}/>}
+                ListFooterComponent={() =><ItemSeparator height={130}/>}
                 keyExtractor={(item) => String(item.recId)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
+                showsVerticalScrollIndicator={false}
+
                 renderItem={({item,index}) => (
-                <TouchableOpacity
+                <TouchableOpacity style={{height:setHeight(20)}}
                 onPress={(item) => {
                 {/*setSearch([]),*/}
                 console.log("hi")
@@ -182,20 +210,12 @@ const Recommend = ({route,navigation}) => {
 
                 });          
               }}>
-                <View style={styles.container5}>
                 <View style={styles.box}>
-                <Text style = {styles.container3}>
-                    {item.itemTitle}
-                </Text>
-                <Avatar.Image style={{backgroundColor:"black",margin:0}} size={50} source={{uri: item.userUrl}} />
-                <Text
-                    style={{right:"50%",top:"20%"}}
-                
-                >{item.userName}</Text>
-                </View>
-            
-  
-                <View styles={styles.container}>
+                <View style={{ shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 3,  
+                  elevation: 5}}>
                     <Image
                     source={{
                         uri: item.itemUrl,
@@ -204,8 +224,36 @@ const Recommend = ({route,navigation}) => {
                     resizeMode="cover"
                 />
             </View>
-        </View>
-        </TouchableOpacity>
+                <View style = {styles.container3}>
+                <Text style={{fontSize: 16,fontWeight: "bold"}}
+                ellipsizeMode='tail' numberOfLines={3}>
+                  {item.itemEnglishTitle ? item.itemEnglishTitle : item.itemTitle}
+                </Text>
+                <View style={{marginTop:5}}>
+                  <Text style={{color:"#6D7275"}}>{item.genres}</Text>
+                </View>
+                <View style={{flexDirection:"row",marginTop:10,marginStart:10,}}>
+                {/*<Text style={{bottom:"13%",marginStart:5}}>{"Action, Romance, Comedy"}</Text>*/}
+                <View style={{shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 3,  
+                  elevation: 5}}>
+                <Avatar.Image style={{bacakgroundColor:"black",right:10}} size={50} source={{uri: item.userUrl}} />
+                </View>
+                <Text style={{marginTop:"10%"}} ellipsizeMode='tail' numberOfLines={1}>{item.userName}</Text>
+                </View>
+
+
+                </View>
+               
+
+                
+                
+                
+                </View>
+
+            </TouchableOpacity>
 
         )}
                 showsHorizontalScrollIndicator={false}/>
@@ -216,9 +264,11 @@ const Recommend = ({route,navigation}) => {
                 icon={{ name: 'add', color: 'white' }} 
                 size = "small" 
                 placement="right"
-                style={{marginEnd:"23%"}}
+                style={{marginEnd:"23%",marginBottom:"11%"}}
                 onPress={toggleOverlay}
              />
+
+                </View>
 
                 <Overlay isVisible={visible} onBackdropPress={toggleOverlay} containerStyle={{justifyContent:"flex-end"}}overlayStyle={{width:"90%",height:"30%"}}>
                 <TextInput
@@ -260,6 +310,7 @@ const Recommend = ({route,navigation}) => {
      
 
     </View>
+    </View>
   )
 }
 
@@ -273,12 +324,14 @@ const styles = StyleSheet.create({
   //},
 
   container5:{
-      backgroundColor: "white",
-      borderRadius: 12,
+      //backgroundColor: "white",
+      //borderRadius: 12,
+      //marginStart:20,
+      //justifyContent:"center",
 
 
     //  width: setWidth(100),
-      height:setHeight(18)
+      //height:setHeight(22)
 
 
   },
@@ -291,20 +344,9 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    //margin:10,
-    justifyContent: "center",
-    alignItems:"center",
     borderRadius: 12,
-    borderTopEndRadius:0,
-    borderBottomEndRadius:0,
-
-    backgroundColor: "#057DFE",
-    paddingVertical: 8,
-    //marginHorizontal:4,
-    bottom:"100%",
-
-    width:setWidth(30), 
-    height:setHeight(18)
+    width:setWidth(25), 
+    height:setHeight(16),
 
 
 
@@ -315,7 +357,7 @@ containerUser: {
     //margin:10,
     //justifyContent: "center",
     //alignItems:"center",
-    flex: 1, 
+    //flex: 1, 
     //backgroundColor:"blue",
     height:setHeight(10),
     width:setWidth(10),
@@ -325,39 +367,34 @@ containerUser: {
 
 
 },
-container2:{
-    //margin:8,
-},
+
 container3:{
-    //width: "100%",
-    //marginTop: 20,
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
-    flex: 1, 
-    //backgroundColor:"blue",
-    height:setHeight(10),
+    marginStart:"10%",
+    marginBottom:"10%",
+    //backgroundColor:"green",
+    //height:"25%",
+    width:"100%",
+    justifyContent: "center",
+    //height:setHeight(10),
 
-    //flexWrap: 'wrap'
 
-    //marginLeft: "10%",
 
-    //marginStart:5,
-    //marginTop:10,
-    //marginBottom:10
 
 
 },
 box:{
     flexDirection:"row",
-    //backgroundColor: "green",
-    
-
-    marginStart:setWidth(35),
-    //top:50
-    paddingVertical: 30,
+    //flex:1,
+    marginStart:setWidth(20),
+    //paddingVertical: 30,
+    marginTop:15,
     alignItems: "center",
+    justifyContent:"center",
     width:setWidth(55),
     height:setHeight(18),
+    //backgroundColor:"green"
  
 
 

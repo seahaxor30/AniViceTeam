@@ -44,7 +44,9 @@ const CreateComment = ({route,navigation}) => {
                 uid:currUser.uid,
                 createdAt:dateTime,
                 commentId:cid,
-                photoURL: currUser.photoURL
+                photoURL: currUser.photoURL,
+                name:currUser.displayName,
+
             };
               
         

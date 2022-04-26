@@ -79,7 +79,22 @@ const  SearchRec = ({route,navigation}) =>{
     };
     const updateUser = async (map) => {
         const recId = postId + map.itemid + "-" + currUser.uid
-        console.log(recId)
+        const genreList = map.genres
+        let genres = [];
+        for (let i = 0; i < genreList.length;i++){
+            if (i !== genreList.length - 1){
+            genres.push(genreList[i]["name"] + ", ")
+            }
+            else{
+                genres.push(genreList[i]["name"])
+            }
+        }
+        console.log("-----")
+        console.log(genres)
+        console.log("-----")
+
+
+
 
 
         const snap = await getDoc(doc(db,`Posts/${postId}/recs`,recId))
@@ -101,11 +116,13 @@ const  SearchRec = ({route,navigation}) =>{
                 itemid: map.itemid,
                 itemUrl:map.itemUrl,
                 itemTitle: map.itemTitle,
+                itemEnglishTitle: map.itemEnglishTitle,
                 itemSynopsis: map.itemSynopsis,
                 userRecId: currUser.uid,
                 userName: currUser.displayName,
                 userUrl: currUser.photoURL,
-                recId: recId
+                recId: recId,
+                genres: genres
             })
             const addPostNum = async () => {
                 const recNumber = num + 1
@@ -183,8 +200,10 @@ const  SearchRec = ({route,navigation}) =>{
             onPress={() => {
                 toggleOverlay({
                 itemid: search[index]["mal_id"],
+                genres: search[index]["genres"],
                 itemUrl:search[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:search[index]["title"],
+                itemEnglishTitle:search[index]["title_english"],
                 itemSynopsis: search[index]["synopsis"]});
                
             }}>
@@ -201,7 +220,7 @@ const  SearchRec = ({route,navigation}) =>{
             onPress={() => {
                     updateUser(anime);
                     toggleOverlay({});
-                    console.log(anime);
+                    {/*console.log(anime);*/}
 
 
                     {/*navigation.navigate("Search Recommendation",{

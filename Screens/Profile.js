@@ -10,6 +10,8 @@ import { Ionicons} from '@expo/vector-icons';
 import { getFirestore,collection,getDoc,doc, getDocs, setDoc, updateDoc,query,where,collectionGroup } from "firebase/firestore"
 import { useFocusEffect } from "@react-navigation/native";
 import ItemSeparator from "../components/ItemSeperator";
+import { getDatabase, ref, onValue, child, get} from "firebase/database";
+
 
 const { width,height } = Dimensions.get("screen");
 
@@ -23,6 +25,9 @@ const  ProfileScreen = ({navigation}) =>{
 
   const isFocused = useIsFocused();
   const currUser1 = authenication.currentUser;
+  const [flatlist,setFlatlist] = React.useState(false);
+  const [data, setData] = React.useState([]);
+
 
 
 
@@ -120,8 +125,58 @@ const  ProfileScreen = ({navigation}) =>{
           }
         });
     }
+    const fetchDiscuss = async () => {
+      const dbRef = ref(getDatabase());
+        get(child(dbRef, `discussionData`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          let queryArray = [];
+          const data = snapshot.val();
+          for (var i in data) {
+            //if there are comments
+            if (data[i]["comments"] != undefined && data[i]["uid"] == currUser1.uid){
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              comments: data[i]["comments"].length,
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: data[i]["comments"].length,
+              name: data[i]["name"],
+              photoURL: data[i]["photoURL"]
+            });
+          }else if (data[i]["comments"] == undefined && data[i]["uid"] == currUser1.uid){
+            queryArray.push({
+              did: data[i]["did"],
+              color: data[i]["color"],
+              discussText: data[i]["text"],
+              createdAt: data[i]["createdAt"],
+              uid: data[i]["uid"],
+              commentNum: 0,
+              name: data[i]["name"],
+              photoURL: data[i]["photoURL"]
+          })
+        }
+            //console.log(data[i]["comments"]) gets all the comments from every post 
+            // get(child(dbRef, `discussionData/`+data[i][""]+'/comments')).then((snapshot) => {
+            //   setsnapNum(queryArray.length)
+            // }).catch((error) => {
+            //   console.error(error);
+            // });
+          }
+      setData(queryArray);
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+          console.error(error);
+        });
+
+      
+    }
 
     fetchData();
+    fetchDiscuss();
     
 
     },[])
@@ -165,6 +220,13 @@ const  ProfileScreen = ({navigation}) =>{
         });
     }, []);
 
+    const recs = () => {
+      setFlatlist(false)
+    }
+    const discuss = () => {
+      setFlatlist(true)
+    }
+
 
 
 
@@ -184,6 +246,8 @@ const  ProfileScreen = ({navigation}) =>{
           onPress={handleSignOut}>
           <Ionicons name="log-out-outline" size={50} color="black" />
         </TouchableOpacity>
+        
+
       </View>
         <View style={{width:"100%",height:"60%",marginTop:"5%",alignContent:"center", shadowColor: 'black',
                   shadowOffset: {width: 1, height: 2},
@@ -191,25 +255,61 @@ const  ProfileScreen = ({navigation}) =>{
                   elevation: 5}}>
     <View style={{borderTopLeftRadius:30,borderTopEndRadius:30,width:"100%",backgroundColor:"white",alignItems:"center",padding:5,}}>
     <Text style={{fontSize:25,fontWeight:"bold"}}>My Posts</Text>
-    <View></View>
+    <View style={{flexDirection:"row",width:"90%",}}>
+    <TouchableOpacity
+          onPress={recs}>
+          <Text style={{fontSize:20,marginEnd:50}}>Recommendations</Text>
+          
+          {flatlist == false &&
+          <View
+            style={{
+                marginTop:10,
+                height: 5,
+                width:"80%",
+                backgroundColor: "#efefef"}}>
+        </View>}
+    </TouchableOpacity>
+    <TouchableOpacity
+          onPress={discuss}>
+          <Text style={{fontSize:20,}}>Discussions</Text>
+          {flatlist == true &&
+          <View
+            style={{
+                marginTop:10,
+                height: 5,
+                width:"100%",
+                backgroundColor: "#efefef"}}>
+        </View>}
+    </TouchableOpacity>
+
+    </View>
+    {/*<TouchableOpacity
+          onPress={switcher}>
+          <Ionicons name="log-out-outline" size={20} color="black" />
+    </TouchableOpacity>*/}
+        
     </View>
     <View style={{width:"100%",height:"100%",backgroundColor:"white",alignItems:"center"}}>
-
+    
+    {flatlist == false && 
     <FlatList style={{marginStart:20,marginEnd:20,marginTop:10,width:"90%"}}
                 data={search}
                 ItemSeparatorComponent={() =><ItemSeparator height={10}width={20}/>}
                 ListHeaderComponent={() =><ItemSeparator height={0}/>}
-                ListFooterComponent={() =><ItemSeparator height={20}/>}
+                ListFooterComponent={() =><ItemSeparator height={80}/>}
                 keyExtractor={(item) => String(item.postId)}
                 //refreshing={refreshing}
                 //onRefresh={onRefresh}
+                showsVerticalScrollIndicator={false}
                 renderItem={({item,index}) => (
                 <TouchableOpacity onPress={(item) => {
                 navigation.navigate("User Recommend",{
                   postText: search[index]["postText"],
                   postId: search[index]["postId"],
                   recNum: search[index]["recNum"],
-                  color: search[index]["color"]
+                  color: search[index]["color"],
+                  name: search[index]["name"],
+                  photoURL: avatar
 
 
                 });           
@@ -226,12 +326,12 @@ const  ProfileScreen = ({navigation}) =>{
                 </View>
                   <View style={{backgroundColor:"white",borderBottomEndRadius:12,borderBottomStartRadius:12,height:setHeight(5),width:"100%",top:"75%",alignItems:"center",position:"absolute",justifyContent:"center"}}>
                   {item.recNum == 1 && 
-                    <Text style={{fontSize: 20,fontWeight: "bold",padding:20}}>
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
                       {item.recNum} Recommendation
                     </Text>
                   }
                   {item.recNum != 1 && 
-                    <Text style={{fontSize: 20,fontWeight: "bold",padding:10}}>
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
                       {item.recNum} Recommendations
                     </Text>
                   } 
@@ -241,7 +341,63 @@ const  ProfileScreen = ({navigation}) =>{
         </View>
         </TouchableOpacity>
         )}
-                showsHorizontalScrollIndicator={false}/>
+                showsHorizontalScrollIndicator={false}/>}
+    {flatlist == true && 
+    <FlatList style={{marginStart:20,marginEnd:20,marginTop:10,width:"90%"}}
+                data={data}
+                ItemSeparatorComponent={() =><ItemSeparator height={10}width={20}/>}
+                ListHeaderComponent={() =><ItemSeparator height={0}/>}
+                ListFooterComponent={() =><ItemSeparator height={80}/>}
+                keyExtractor={(item) => String(item.did)}
+                //refreshing={refreshing}
+                //onRefresh={onRefresh}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item,index}) => (
+                <TouchableOpacity onPress={(item) => {
+                    console.log(data[index]);
+                    navigation.navigate("Discuss",
+                    {
+                      discussText: data[index]["discussText"],
+                      discussId: data[index]["did"],
+                      createdAt: data[index]["createdAt"],
+                      color: data[index]["color"],
+                      uid: data[index]["uid"],
+                      comments: data[index]["comments"],
+                      name: data[index]["name"],
+                      photoURL: avatar
+                    });
+                }}>
+            <View style={{backgroundColor:item.color,borderRadius:12,height:setHeight(20),width:"100%",
+                  shadowColor: 'black',
+                  shadowOffset: {width: 1, height: 2},
+                  shadowOpacity: 0.3,
+                  elevation: 5}}>
+                <View style={{margin:"10%",height:"40%"}}>
+                  <Text numberofLines={1} ellipsizeMode="tail" style={{fontSize: 20,fontWeight: "bold"}}>
+                    {item.discussText}
+                  </Text>
+                </View>
+                  <View style={{backgroundColor:"white",borderBottomEndRadius:12,borderBottomStartRadius:12,height:setHeight(5),width:"100%",top:"75%",alignItems:"center",position:"absolute",justifyContent:"center"}}>
+                  {item.recNum == 1 && 
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
+                      {item.commentNum} Comment
+                    </Text>
+                  }
+                  {item.recNum != 1 && 
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
+                      {item.commentNum} Comments
+                    </Text>
+                  } 
+                  </View>
+
+               
+        </View>
+        </TouchableOpacity>
+        )}
+                showsHorizontalScrollIndicator={false}/>}
+        
+
+
     
     </View>
     </View>    
@@ -304,7 +460,7 @@ const  ProfileScreen = ({navigation}) =>{
     },
     logOutButton: {
       position:"absolute",
-      bottom:setHeight(33),
+      bottom:setHeight(35),
       left:setWidth(40)
     }
   

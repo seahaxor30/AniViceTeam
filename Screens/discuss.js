@@ -11,6 +11,7 @@ import { Button, Overlay, Icon } from 'react-native-elements';
 import { TextInput } from "react-native-paper";
 import { Avatar } from 'react-native-paper';
 import { getDatabase, ref, onValue, child, get, set} from "firebase/database";
+import { authenication } from "../firebase";
 
 
 const { width,height } = Dimensions.get("screen");
@@ -29,7 +30,7 @@ const Discuss = ({route,navigation}) => {
   const [snapNum, setsnapNum] = React.useState(0)
   const [title,setTitle] = React.useState("")
   var num = 0;
-  const {discussId,discussText,color} = route.params;
+  const {discussId,discussText,color,name,photoURL} = route.params;
   const [visible, setVisible] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);  
   const [data, setData] = React.useState([]);
@@ -52,7 +53,8 @@ const Discuss = ({route,navigation}) => {
               commentText: data[i]["text"],
               createdAt: data[i]["createdAt"],
               uid: data[i]["uid"],
-              userUrl: data[i]["photoURL"]
+              userUrl: data[i]["photoURL"],
+              name: data[i]["name"]
             });
           }
       //console.log(queryArray)
@@ -73,6 +75,10 @@ const Discuss = ({route,navigation}) => {
   fetchData();
 
 },[]));
+const navigater = () => {
+  navigation.goBack();
+
+}
 
 
 const onRefresh = React.useCallback(() => {
@@ -120,46 +126,96 @@ const onRefresh = React.useCallback(() => {
    
     
   return (
-    <View style={{flex: 1,backgroundColor: color,alignItems: "center"}}>
-    <View style={{width:"100%",marginTop:"20%",marginBottom:"20%"}}>
-    <Text>
-        {discussText} 
-    </Text>
-    </View>
-
+    <View style={{backgroundColor:color,height:"100%"}}>
+    
+    
     <View>
-        {search.length == 1 && 
-            <Text> {search.length} Comment </Text>
+    <View style={{width:setWidth(20),height:setHeight(4),marginTop:35,marginLeft:"77%",backgroundColor:"#057DFE",borderRadius:10,justifyContent:"center"}}>
+    <TouchableOpacity onPress={navigater}>
+      <Text style={{alignSelf:"center",color:"white",fontSize:18}}>Back</Text>
+    </TouchableOpacity>
+    </View>
+    <View style={{width:"100%",flexDirection:"row"}}>
+    <View style={{width:setWidth(20),height:setHeight(7),alignItems:"center",marginTop:10,marginStart:10}}>
+      <Image
+        source={{uri: photoURL}}
+        style={{width:setWidth(15),height:setHeight(7),borderRadius:100}}
+        resizeMode="cover"/>
+      <View style={{marginTop:5}}>
+        <Text numberOfLines={1} style={{fontSize:15,fontWeight:"bold"}}>
+            {name} 
+        </Text>
+    </View>
+    </View>
+    <View style={{margin:0,width:setWidth(70),height:setHeight(30),margin:10}}>
+      <Text style={{fontSize:30,fontWeight:"500"}}>
+        {discussText} 
+      </Text>
+    </View>
+    
+    </View>
+    <View style={{width:"100%",height:"60%",alignContent:"center", shadowColor: 'black',
+                  shadowOffset: {width: 1, height: 2},
+                  shadowOpacity: 0.3,
+                  elevation: 5}}>
+    <View style={{borderTopLeftRadius:30,borderTopEndRadius:30,width:"100%",backgroundColor:"white",alignItems:"center",padding:5,}}>
+    {search.length == 1 && 
+            <Text style={{fontSize:20,fontWeight:"bold"}}> {search.length} Comment </Text>
         }
         {search.length != 1 && 
-            <Text>{search.length} Comments </Text>
-        }    
-        
+            <Text style={{fontSize:20,fontWeight:"bold"}}>{search.length} Comments </Text>
+        }
+    <View>
 
+
+    </View>  
     </View>
-
-
-    <View style={{backgroundColor:"#efefef",height:"58%",width:"95%",margin:20,borderRadius:10,flex:1}}>
-      <FlatList style={{margin:10}}
+    <View style={{width:"100%",height:"100%",backgroundColor:"white"}}>
+      <FlatList style={{marginTop:5}}
                 data={search}
                 ItemSeparatorComponent={() =><ItemSeparator height={10}width={20}/>}
-                ListHeaderComponent={() =><ItemSeparator height={20}/>}
-                ListFooterComponent={() =><ItemSeparator height={30}/>}
+                ListHeaderComponent={() =><ItemSeparator height={5}/>}
+                ListFooterComponent={() =><ItemSeparator height={130}/>}
                 keyExtractor={(item) => String(item.commentId)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 renderItem={({item,index}) => (
-                <View style={styles.container5}>
-                <View style={styles.box}>
-                <Text style = {styles.container3}>
-                    {item.commentText}
-                </Text>
-                <Avatar.Image style={{backgroundColor:"black",margin:0}} size={50} source={{uri: item.userUrl}} />
-                <Text style={{right:"50%",top:"20%"}}>
-                  {item.userName}
-                </Text>
-              </View>
-        </View>
+                  <View style={styles.box}>
+                  <View style={{width:"100%",flexDirection:"row"}}>
+    <View style={{width:setWidth(20),alignItems:"center",height:setHeight(7),marginTop:10,marginStart:10}}>
+      <View style={{shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 3,  
+                  elevation: 5}}>
+      <Image
+        source={{uri: item.userUrl}}
+        style={{width:setWidth(15),height:setHeight(7),borderRadius:100,}}
+        resizeMode="cover"/>
+      </View>
+      <View style={{marginTop:5}}>
+        <Text numberOfLines={1} style={{fontSize:15,fontWeight:"bold"}}>
+            {item.name} 
+        </Text>
+    </View>
+    </View>
+    <View style={{margin:10,backgroundColor:"#efefef",shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 3,  
+                  elevation: 5,borderRadius:15,padding:10,justifyContent:"center"}}>
+      <Text style={{fontSize:15,fontWeight:"500"}}>
+        {item.commentText} 
+      </Text>
+    </View>
+    
+    </View>
+               
+
+                
+                
+                
+                </View>
 
         )}
                 showsHorizontalScrollIndicator={false}/>
@@ -170,7 +226,7 @@ const onRefresh = React.useCallback(() => {
                 icon={{ name: 'add', color: 'white' }} 
                 size = "small" 
                 placement="right"
-                style={{marginEnd:"27%"}}
+                style={{marginEnd:"27%",marginBottom:"10%"}}
                 onPress={() => {
                   navigation.navigate("Create Comment",{
                       discussId: discussId
@@ -178,6 +234,8 @@ const onRefresh = React.useCallback(() => {
 
                 }}
              />
+    </View>
+    </View>
     </View>
   )
 }
@@ -192,12 +250,14 @@ const styles = StyleSheet.create({
   //},
 
   container5:{
-      backgroundColor: "white",
-      borderRadius: 12,
+      //backgroundColor: "white",
+      //borderRadius: 12,
+      //marginStart:20,
+      //justifyContent:"center",
 
 
     //  width: setWidth(100),
-      height:setHeight(18)
+      //height:setHeight(22)
 
 
   },
@@ -210,20 +270,9 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    //margin:10,
-    justifyContent: "center",
-    alignItems:"center",
     borderRadius: 12,
-    borderTopEndRadius:0,
-    borderBottomEndRadius:0,
-
-    backgroundColor: "#057DFE",
-    paddingVertical: 8,
-    //marginHorizontal:4,
-    bottom:"100%",
-
-    width:setWidth(30), 
-    height:setHeight(18)
+    width:setWidth(25), 
+    height:setHeight(16),
 
 
 
@@ -234,7 +283,7 @@ containerUser: {
     //margin:10,
     //justifyContent: "center",
     //alignItems:"center",
-    flex: 1, 
+    //flex: 1, 
     //backgroundColor:"blue",
     height:setHeight(10),
     width:setWidth(10),
@@ -244,39 +293,34 @@ containerUser: {
 
 
 },
-container2:{
-    //margin:8,
-},
+
 container3:{
-    //width: "100%",
-    //marginTop: 20,
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
-    flex: 1, 
-    //backgroundColor:"blue",
-    height:setHeight(10),
+    marginStart:"10%",
+    marginBottom:"10%",
+    //backgroundColor:"green",
+    //height:"25%",
+    width:"100%",
+    justifyContent: "center",
+    //height:setHeight(10),
 
-    //flexWrap: 'wrap'
 
-    //marginLeft: "10%",
 
-    //marginStart:5,
-    //marginTop:10,
-    //marginBottom:10
 
 
 },
 box:{
     flexDirection:"row",
-    //backgroundColor: "green",
-    
-
-    marginStart:setWidth(35),
-    //top:50
-    paddingVertical: 30,
-    alignItems: "center",
+    //flex:1,
+    //marginStart:setWidth(20),
+    //paddingVertical: 30,
+    marginTop:15,
+    //alignItems: "center",
+    justifyContent:"center",
     width:setWidth(55),
-    height:setHeight(18),
+    //height:setHeight(10),
+    //backgroundColor:"green"
  
 
 
