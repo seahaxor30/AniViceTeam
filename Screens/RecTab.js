@@ -122,6 +122,8 @@ const RecommendationsTab = ({navigation}) => {
                 keyExtractor={(item) => String(item.postId)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
+                showsVerticalScrollIndicator={false}
+
                 //onEndReachedThreshold={0.5}
                 //onMomentumScrollBegin={()=>{onEndReachedCalledDuringMomentum = false}}
                 //refreshing={loading}
@@ -138,7 +140,10 @@ const RecommendationsTab = ({navigation}) => {
                       postText: search[index]["postText"],
                       postId: search[index]["postId"],
                       recNum: search[index]["recNum"],
-                      color: search[index]["color"]
+                      color: search[index]["color"],
+                      name: search[index]["name"],
+                      photoURL: currUser.photoURL,
+
                     });
                   }
                   else{
@@ -147,7 +152,11 @@ const RecommendationsTab = ({navigation}) => {
                       postText: search[index]["postText"],
                       postId: search[index]["postId"],
                       recNum: search[index]["recNum"],
-                      color: search[index]["color"]
+                      color: search[index]["color"],
+                      name: search[index]["name"],
+                      photoURL: search[index]["photoURL"],
+
+
 
                     });
                 }
@@ -164,12 +173,12 @@ const RecommendationsTab = ({navigation}) => {
                 </View>
                   <View style={{backgroundColor:"white",borderBottomEndRadius:12,borderBottomStartRadius:12,height:setHeight(5),width:"100%",top:"80%",alignItems:"center",position:"absolute",justifyContent:"center"}}>
                   {item.recNum == 1 && 
-                    <Text style={{fontSize: 20,fontWeight: "bold",padding:10}}>
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
                       {item.recNum} Recommendation
                     </Text>
                   }
                   {item.recNum != 1 && 
-                    <Text style={{fontSize: 20,fontWeight: "bold",padding:10}}>
+                    <Text style={{fontSize: 20,fontWeight: "bold",padding:8.5}}>
                       {item.recNum} Recommendations
                     </Text>
                   } 

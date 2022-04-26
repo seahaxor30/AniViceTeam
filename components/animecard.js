@@ -6,12 +6,20 @@ const setWidth = (w) => (width / 100) * w;
 const setHeight = (h) => (height / 100) * h;
 
 
-const AnimeCard = ({ item }) => {
+const AnimeCard = ({item}) => {
     return(
         <View>
-                    <TouchableOpacity style = {styles.itemPhoto}>
-                        <Text style={styles.textStyle}>Anime </Text>
+            <View style={styles.itemPhoto}> 
+                    <TouchableOpacity>
+                        <Image
+                            source={{
+                                uri: item.photoURL,
+                            }}
+                            style={styles.itemPhoto}
+                            resizeMode="cover"
+                        />
                     </TouchableOpacity>
+                    </View>
                 <View style={{width: setWidth(30)}}>
                 
                 <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
@@ -34,12 +42,21 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems:"center",
         borderRadius: 12,
-        backgroundColor: "#057DFE",
+        //backgroundColor: "white",
         paddingVertical: 8,
-        elevation: 5,
         marginVertical: 2,
         width:setWidth(35), 
         height:setHeight(25)
+      },
+      photo:{
+        justifyContent: "center",
+        alignItems:"center",
+        //backgroundColor: "white",
+        paddingVertical: 8,
+        marginVertical: 2,
+        width:setWidth(35), 
+        height:setHeight(25)
+
       },
       itemText: {
         //color: 'b',

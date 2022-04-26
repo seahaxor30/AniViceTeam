@@ -24,7 +24,8 @@ const CreateDiscuss = ({navigation}) => {
         var colorList =  ["#64B0A5","#F3CA3E","#FF3366","#3399FF","#64B075","#CA6CC1","#33E1FF","#FF5F58","#828282","#2AC940","#7C6DF7"];
         var color = colorList[randNumber];
         var uid = currUser.uid;
-
+        var photoURL = currUser.photoURL;
+        var name = currUser.displayName;
         let current = new Date();
         let cDate = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
         let cTime = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
@@ -47,7 +48,11 @@ const CreateDiscuss = ({navigation}) => {
             uid: uid,
             text: discussion,
             color: color,
-            createdAt: dateTime//,
+            createdAt: dateTime,
+            name: name,
+            photoURL: photoURL
+
+            //,
             // comments:[{
             //         text:"",
             //         uid:"",
@@ -85,42 +90,45 @@ const CreateDiscuss = ({navigation}) => {
     }, []);
     
 
-    const CreateDiscussion = async (discussion) => {
-        var newDiscussNum = discussNum + 1
-        var discussNumber = num + 1
-        var discussId = newDiscussNum + "-" + currUser.uid
-        var commentNum = 0        
-        var randNumber = Math.floor(Math.random() * 10);
-        var colorList =  ["#64B0A5","#F3CA3E","#FF3366","#3399FF","#64B075","#CA6CC1","#33E1FF","#FF5F58","#828282","#2AC940","#7C6DF7"];
-        var color = colorList[randNumber];
-        await setDoc(doc(db,"Discussions",discussId), {
-            discussId: discussId,
-            discussText: discussion,
-            commentNum: commentNum,
-            uid: currUser.uid,
-            color: color
-        });
+    //const CreateDiscussion = async (discussion) => {
+    //    var newDiscussNum = discussNum + 1
+    //    var discussNumber = num + 1
+    //    var discussId = newDiscussNum + "-" + currUser.uid
+    //    var commentNum = 0        
+    //    var randNumber = Math.floor(Math.random() * 10);
+    //    var colorList =  ["#64B0A5","#F3CA3E","#FF3366","#3399FF","#64B075","#CA6CC1","#33E1FF","#FF5F58","#828282","#2AC940","#7C6DF7"];
+    //    var color = colorList[randNumber];
+    //    await setDoc(doc(db,"Discussions",discussId), {
+    //        discussId: discussId,
+    //        discussText: discussion,
+    //        commentNum: commentNum,
+    //        uid: currUser.uid,
+    //        color: color,
+    //        photoURL: currUser.photoURL,
+    //        name:currUser.displayName,
+
+    //    });
         
 
-        const updateUser = async () => {
-            await updateDoc(doc(db,"Users",currUser.uid),{
-                discussNum: newDiscussNum
-            });
+    //    const updateUser = async () => {
+    //        await updateDoc(doc(db,"Users",currUser.uid),{
+    //            discussNum: newDiscussNum
+    //        });
 
-        }
-        const addDiscussNum = async () => {
-            await updateDoc(doc(db,"DiscussNum","DiscussNum"),{
-                discussNum: discussNumber
-            });
+    //    }
+    //    const addDiscussNum = async () => {
+    //        await updateDoc(doc(db,"DiscussNum","DiscussNum"),{
+    //            discussNum: discussNumber
+    //        });
 
-        }
+    //    }
 
 
-        updateUser();
-        addDiscussNum();
-        navigation.replace("TABS",{screen: 'Community'});
+    //    updateUser();
+    //    addDiscussNum();
+    //    navigation.replace("TABS",{screen: 'Community'});
 
-    }
+    //}
     
 
 

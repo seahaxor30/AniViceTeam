@@ -46,7 +46,9 @@ const DiscussionsTab = ({navigation}) => {
               discussText: data[i]["text"],
               createdAt: data[i]["createdAt"],
               uid: data[i]["uid"],
-              commentNum: data[i]["comments"].length
+              commentNum: data[i]["comments"].length,
+              name: data[i]["name"],
+              photoURL: data[i]["photoURL"]
             });
           }else{
             queryArray.push({
@@ -55,7 +57,9 @@ const DiscussionsTab = ({navigation}) => {
               discussText: data[i]["text"],
               createdAt: data[i]["createdAt"],
               uid: data[i]["uid"],
-              commentNum: 0
+              commentNum: 0,
+              name: data[i]["name"],
+              photoURL: data[i]["photoURL"]
           })
         }
             //console.log(data[i]["comments"]) gets all the comments from every post 
@@ -103,7 +107,9 @@ const DiscussionsTab = ({navigation}) => {
               discussText: data[i]["text"],
               createdAt: data[i]["createdAt"],
               uid: data[i]["uid"],
-              commentNum: data[i]["comments"].length
+              commentNum: data[i]["comments"].length,
+              name: data[i]["name"],
+              photoURL: data[i]["photoURL"]
             });
           }else{
             queryArray.push({
@@ -112,7 +118,9 @@ const DiscussionsTab = ({navigation}) => {
               discussText: data[i]["text"],
               createdAt: data[i]["createdAt"],
               uid: data[i]["uid"],
-              commentNum: 0
+              commentNum: 0,
+              name: data[i]["name"],
+              photoURL: data[i]["photoURL"]
           })
         }
           }
@@ -147,8 +155,11 @@ const DiscussionsTab = ({navigation}) => {
                 keyExtractor={(item) => String(item.did)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
+                showsVerticalScrollIndicator={false}
+
                 renderItem={({item,index}) => (
                 <TouchableOpacity onPress={(item) => {
+                    console.log(data[index]);
                     navigation.navigate("Discuss",
                     {
                       discussText: data[index]["discussText"],
@@ -156,7 +167,9 @@ const DiscussionsTab = ({navigation}) => {
                       createdAt: data[index]["createdAt"],
                       color: data[index]["color"],
                       uid: data[index]["uid"],
-                      comments: data[index]["comments"]
+                      comments: data[index]["comments"],
+                      name: data[index]["name"],
+                      photoURL: data[index]["photoURL"]
                     });
                 }
               }>

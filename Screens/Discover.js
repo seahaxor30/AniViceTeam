@@ -3,6 +3,7 @@ import ItemSeparator from "../components/ItemSeperator"
 const { width,height } = Dimensions.get("screen");
 import Searchbar from "../components/SearchBar";
 import { Ionicons} from '@expo/vector-icons';
+import AnimeList from "../components/flatlist";
 
 
 const setWidth = (w) => (width / 100) * w;
@@ -30,37 +31,6 @@ const Discover = ({navigation}) => {
   const [topAnime, SetTopAnime] = React.useState([]);
   const [upcoming, SetUpcoming] = React.useState([]);
 
-
-  //function updateSearch(value) {
-  //    //do your search logic or anything
-  //    console.log(value)
-  //}
-//  const getMovieList  = async () => {
-//    const response = await fetch(`https://api.jikan.moe/v4/seasons/now?limit=7`);
-//            try {
-//                const responseJson = await response.json();
-//                SetAiring(responseJson.data);
-//            } catch (err) {
-//                console.error(err);
-//            }
-
-//};
-
-//React.useEffect (()=> {
-   
-// getMovieList();
-//}, []);
-//React.useEffect(()=>{
-//  fetch(`https://api.jikan.moe/v4/seasons/now?limit=7`)
-//  .then(re => re.json())
-//  .then((re) => {
-//    SetAiring(re.data);
-
-//})
-//},[]);
-  
-  
-  
   React.useEffect(()=>{
     fetch(`https://api.jikan.moe/v4/seasons/now?limit=7`)
     .then(re => re.json())
@@ -100,41 +70,14 @@ React.useEffect(()=>{
       <StatusBar style="light" />
 
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{alignItems:"center"}}>
-        <View style={{width:"80%",margin:15,marginBottom:0}}>
+        <View style={{alignItems:"center",width:"100%",margin:15,marginBottom:0,flexDirection:"row"}}>
         <TextInput 
           style={styles.search}
           placeholder="🔎 Search for Anime"
           onChangeText={text => onChangeText(text)}
-          value={value}
-          onSubmitEditing={() => navigation.navigate("Search",{title:value})}>
+          value={value}>
         </TextInput>
         </View>
-        </View>
-        {/*<View style={styles.container4}>
-        <View style={styles.searchContainer}>
-                <TextInput
-                    value=""
-                    placeholder="Search"
-                    style={styles.textInput}
-                    onChangeText={(text) => {
-                        var letters = /^$|^[a-zA-Z._\b ]+$/;
-                        if (text.length > 12)
-                            setError("Query too long.")
-                        else if (text.match(letters)) {
-                            setQuery(text)
-                            updateSearch(text)
-                            if (error)
-                                setError(false)
-                        }
-                        else setError("Please only enter alphabets")
-                    }}
-                />
-
-        </View>
-        </View>*/}
-
-
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Airing Now</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Airing Now")}>
@@ -142,6 +85,7 @@ React.useEffect(()=>{
         </TouchableOpacity>
       </View>
       <View>
+        {airingNow.length > 0 &&
         <FlatList 
           data={airingNow}
           horizontal
@@ -150,7 +94,6 @@ React.useEffect(()=>{
           ListFooterComponent={() =><ItemSeparator width={20}/>}
           showsHorizontalScrollIndicator={false}
           key={0}
-  
           keyExtractor={(item) => item.mal_id}
           renderItem={({item,index}) => (        
             <View style={styles.item} key={index}>
@@ -184,7 +127,10 @@ React.useEffect(()=>{
 
           )}
             
-        />
+        />}
+        {airingNow.length == 0 &&
+          <AnimeList id={0}/>
+        }
       </View>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Upcoming Anime</Text>
@@ -193,6 +139,7 @@ React.useEffect(()=>{
         </TouchableOpacity>
       </View>
       <View>
+        {upcoming.length > 0 &&
         <FlatList 
           data={upcoming}
           horizontal
@@ -234,7 +181,10 @@ React.useEffect(()=>{
 
           )}
             
-        />
+        />}
+        {upcoming.length == 0 &&
+          <AnimeList id={1}/>
+      }
       </View>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Top Ranked Anime </Text>
@@ -243,10 +193,11 @@ React.useEffect(()=>{
         </TouchableOpacity>
       </View>
       <View>
+        {topAnime.length > 0 &&
         <FlatList 
           data={topAnime}
           horizontal
-          key={3}
+          key={2}
           ItemSeparatorComponent={() =><ItemSeparator width={20}/>}
           ListHeaderComponent={() =><ItemSeparator width={20}/>}
           ListFooterComponent={() =><ItemSeparator width={20}/>}
@@ -284,7 +235,11 @@ React.useEffect(()=>{
 
           )}
             
-        />
+        />}
+        {topAnime.length == 0 &&
+          <AnimeList id={2}/>
+        
+        }
       </View>
       </SafeAreaView>
       {/*<TouchableOpacity style={{zIndex: 100}}>
@@ -400,7 +355,6 @@ searchContainer:
     justifyContent: "center",
     alignItems:"center",
     borderRadius: 12,
-    backgroundColor: "#057DFE",
     paddingVertical: 8,
     marginHorizontal:-10,
     marginVertical: 2,

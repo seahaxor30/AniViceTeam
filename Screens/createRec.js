@@ -50,6 +50,8 @@ const CreateRec = ({navigation}) => {
             postText: post,
             recNum: recNum,
             uid: currUser.uid,
+            photoURL: currUser.photoURL,
+            name: currUser.displayName,
             color: color
         });
         
