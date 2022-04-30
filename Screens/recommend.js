@@ -270,7 +270,7 @@ const Recommend = ({route,navigation}) => {
 
                 </View>
 
-                <Overlay isVisible={visible} onBackdropPress={toggleOverlay} containerStyle={{justifyContent:"flex-end"}}overlayStyle={{width:"90%",height:"30%"}}>
+                <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{width:"90%",height:"30%",justifyContent:"center",bottom:"10%"}}>
                 <TextInput
                 autoFocus={true}
                 style={{padding:10,fontSize:20,margin:10}}

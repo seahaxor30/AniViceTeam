@@ -1,5 +1,5 @@
 import React from "react";
-import { Text,View,Button,Alert,TouchableOpacity,ScrollView,StyleSheet,FlatList,Dimensions,Image} from "react-native";
+import { Text,View,Button,Alert,ActivityIndicator,TouchableOpacity,ScrollView,StyleSheet,FlatList,Dimensions,Image} from "react-native";
 import FlatListBig from "../components/flatlistBig";
 import AnimeCard from "../components/animecard";
 import ItemSeparator from "../components/ItemSeperator";
@@ -13,11 +13,11 @@ const setHeight = (h) => (height / 100) * h;
 
 
 const AiringScreen = ({navigation}) => {
-    const [ airingNow, SetAiring] = React.useState([]);
+    const [ airingNow, SetAiring] = React.useState(null);
     const [topAnime, SetTopAnime] = React.useState([]);
     const [ upcoming, SetUpcoming] = React.useState([]);
     React.useEffect(()=>{
-        fetch(`https://api.jikan.moe/v4/seasons/now`)
+        fetch(`https://api.jikan.moe/v4/seasons/now?limit=24`)
         .then(re => re.json())
         .then((re) => {
           SetAiring(re.data);
@@ -27,6 +27,9 @@ const AiringScreen = ({navigation}) => {
     return(
         
         <View style={styles.container2}>
+        {airingNow == null && <View style={{height:"100%",justifyContent:"center",alignItems:"center"}}>
+            <ActivityIndicator size="large" color="#057DFE" />
+        </View>}
             <FlatList style={styles.flatlist} 
                 data={airingNow}
                 ItemSeparatorComponent={() =><ItemSeparator height={10}width={20}/>}
@@ -79,11 +82,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems:"center",
         borderRadius: 12,
-        backgroundColor: "#057DFE",
         paddingVertical: 8,
         marginHorizontal:4,
         width:setWidth(30), 
-        height:setHeight(18)
+        height:setHeight(20)
 
 
     },

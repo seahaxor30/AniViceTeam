@@ -4,8 +4,8 @@ import ItemSeparator from "./ItemSeperator"
 import AnimeCard from "./animecard";
 
     const animelist = [
-        {title:"",photoURL:"https://www.burmunk.am/themes/burmunk/assets/no-product-image.png",id:1}, 
-        {title:"",photoURL:"https://www.burmunk.am/themes/burmunk/assets/no-product-image.png",id:2}, 
+        {title:"-",photoURL:"https://www.burmunk.am/themes/burmunk/assets/no-product-image.png",id:1}, 
+        {title:"-",photoURL:"https://www.burmunk.am/themes/burmunk/assets/no-product-image.png",id:2}, 
         {title:"",photoURL:"https://www.burmunk.am/themes/burmunk/assets/no-product-image.png",id:3}, 
         {title:"",photoURL:"https://www.burmunk.am/themes/burmunk/assets/no-product-image.png",id:4}, 
         {title:"",photoURL:"https://www.burmunk.am/themes/burmunk/assets/no-product-image.png",id:5},

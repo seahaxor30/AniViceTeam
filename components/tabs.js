@@ -36,6 +36,8 @@ const Tabs = (props) => {
         return <Ionicons name={iconName} size={size} color={color} />;
       },
       tabBarActiveTintColor: "#057DFE",
+      tabBarHideOnKeyboard:true,
+    
       tabBarInactiveTintColor: 'gray', })} initialRouteName = "Home">
       <Tab.Screen name = "Profile" component = {ProfileScreen} />
       <Tab.Screen name = "Community" component = {Community}/>

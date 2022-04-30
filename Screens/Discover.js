@@ -1,11 +1,10 @@
 import ItemSeparator from "../components/ItemSeperator"
 
-const { width,height } = Dimensions.get("screen");
 import Searchbar from "../components/SearchBar";
 import { Ionicons} from '@expo/vector-icons';
 import AnimeList from "../components/flatlist";
-
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+const { width,height } = Dimensions.get("screen");
 const setWidth = (w) => (width / 100) * w;
 const setHeight = (h) => (height / 100) * h;
 const windowWidth = Dimensions.get('window').width;
@@ -19,6 +18,8 @@ import {
   SectionList,
   SafeAreaView,
   Image,
+  ActivityIndicator,
+  Icon,
   TouchableOpacity,Dimensions,FlatList,ScrollView,TextInput
 } from 'react-native';
 import SearchAnime from "../components/SearchBar";
@@ -27,19 +28,18 @@ import SearchAnime from "../components/SearchBar";
 const Discover = ({navigation}) => {
   const [value, onChangeText] = React.useState("");
 
-  const [airingNow, SetAiring] = React.useState([]);
-  const [topAnime, SetTopAnime] = React.useState([]);
-  const [upcoming, SetUpcoming] = React.useState([]);
+  const [airingNow, SetAiring] = React.useState(null);
+  const [topAnime, SetTopAnime] = React.useState(null);
+  const [upcoming, SetUpcoming] = React.useState(null);
 
-  React.useEffect(()=>{
-    fetch(`https://api.jikan.moe/v4/seasons/now?limit=7`)
-    .then(re => re.json())
-    .then((re) => {
+React.useEffect(()=>{
+  fetch(`https://api.jikan.moe/v4/seasons/now?limit=7`)
+  .then(re => re.json())
+  .then((re) => {
       SetAiring(re.data);
-      console.log(airingNow);
 
-  })
-  },[]);
+})
+},[]);
 React.useEffect(()=>{
   fetch(`https://api.jikan.moe/v4/top/anime?limit=7`)
   .then(re => re.json())
@@ -60,32 +60,51 @@ React.useEffect(()=>{
   let temp = airingNow;
   let temp2 = topAnime;
   let temp3 = upcoming;
+  
 
   return (
-    <View style={styles.see2}>
-      
-    <View style={styles.see}>
-      
-    <ScrollView style={styles.container}>
-      <StatusBar style="light" />
+   
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled" style={styles.container}>
+      {/*<StatusBar style="light" />*/}
+        <View style={{alignItems:"center",flexDirection:"row",margin:15}}>
+        <View style={{flexDirection: 'row',padding: 10,
+        backgroundColor:"white",borderRadius:12,width:"75%"
 
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={{alignItems:"center",width:"100%",margin:15,marginBottom:0,flexDirection:"row"}}>
+        }}>
+        <Ionicons name="search" size={20} color={"grey"} />
         <TextInput 
           style={styles.search}
-          placeholder="🔎 Search for Anime"
+          placeholder="Search for Anime"
           onChangeText={text => onChangeText(text)}
           value={value}>
         </TextInput>
+        
         </View>
-      <View style={styles.headerContainer}>
+        <View>
+          <TouchableOpacity style={styles.button}
+          onPress={() => {
+            if (value != "") {
+            navigation.navigate("Search",{title:value})
+            onChangeText("") }       
+        }}>
+              <Text style={styles.buttonText}>Search</Text>
+          </TouchableOpacity>
+
+        </View>
+        </View>
+        
+      {airingNow == null || upcoming == null || topAnime  == null && <View style={{alignItems:"center",marginTop:"60%"}}>
+      <ActivityIndicator size="large" color="#057DFE" />
+        </View>}
+      {airingNow != null && upcoming != null && topAnime != null &&
+      <View>
+      <View style={[styles.headerContainer,{marginTop:-20}]}>
         <Text style={styles.headerTitle}>Airing Now</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Airing Now")}>
           <Text style={styles.headerSubTitle}>VIEW ALL</Text>
         </TouchableOpacity>
       </View>
       <View>
-        {airingNow.length > 0 &&
         <FlatList 
           data={airingNow}
           horizontal
@@ -127,10 +146,10 @@ React.useEffect(()=>{
 
           )}
             
-        />}
-        {airingNow.length == 0 &&
+        />
+        {/*{airingNow.length == 0 &&
           <AnimeList id={0}/>
-        }
+        }*/}
       </View>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Upcoming Anime</Text>
@@ -139,7 +158,6 @@ React.useEffect(()=>{
         </TouchableOpacity>
       </View>
       <View>
-        {upcoming.length > 0 &&
         <FlatList 
           data={upcoming}
           horizontal
@@ -181,10 +199,10 @@ React.useEffect(()=>{
 
           )}
             
-        />}
-        {upcoming.length == 0 &&
+        />
+        {/*{upcoming.length == 0 &&
           <AnimeList id={1}/>
-      }
+      }*/}
       </View>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Top Ranked Anime </Text>
@@ -193,7 +211,6 @@ React.useEffect(()=>{
         </TouchableOpacity>
       </View>
       <View>
-        {topAnime.length > 0 &&
         <FlatList 
           data={topAnime}
           horizontal
@@ -204,7 +221,7 @@ React.useEffect(()=>{
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => item.mal_id}
           renderItem={({item,index}) => (        
-            <View style={styles.item}key={index}>
+            <View style={[styles.item,{marginBottom:30}]}key={index}>
             <TouchableOpacity onPress={(item) => {
                 navigation.navigate("Anime Detail",{
                 itemid: temp2[index]["mal_id"],
@@ -235,25 +252,15 @@ React.useEffect(()=>{
 
           )}
             
-        />}
-        {topAnime.length == 0 &&
+        />
+        {/*{topAnime.length == 0 &&
           <AnimeList id={2}/>
         
-        }
-      </View>
-      </SafeAreaView>
-      {/*<TouchableOpacity style={{zIndex: 100}}>
-    <Ionicons name="bookmark" size={70} color="black" />
-    </TouchableOpacity>*/}
-    </ScrollView>
-    {/*<TouchableOpacity style={{zIndex: 5}}>
-    <Ionicons name="bookmark" size={70} color="black" />
-    </TouchableOpacity>*/}
-    </View>
-    {/*<TouchableOpacity style={{zIndex: 100, width:10}}>
-    <Ionicons name="bookmark" size={70} color="black" />
-    </TouchableOpacity>*/}
-    </View>
+        }*/}
+       </View>
+      </View>}
+    </KeyboardAwareScrollView>
+
   );
 };
 
@@ -292,12 +299,14 @@ const styles = StyleSheet.create({
 
 
   search:{
-      height: 50,
+      //height: 50,
+      flex: 1,
       //width: windowWidth - 50,
-      backgroundColor:"white",
-      paddingVertical:15,
+      fontSize:16,
+      //backgroundColor:"white",
+      //paddingVertical:15,
       paddingHorizontal:10,
-      borderRadius: 10,
+      //borderRadius: 10,
 
  
   },
@@ -306,7 +315,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "500",
     color: "#057DFE",
-    marginTop: 20,
+    marginTop: 15,
     marginEnd: 20
 
   },
@@ -363,6 +372,21 @@ searchContainer:
   },
   itemText: {
     marginTop: 5,
+  },
+  button: {
+    margin: 10,
+    backgroundColor: "#057DFE",
+    height: 40,
+    width: "120%",
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  },
+
+  buttonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
 
 });
