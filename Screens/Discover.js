@@ -31,12 +31,14 @@ const Discover = ({navigation}) => {
   const [topAnime, SetTopAnime] = React.useState([]);
   const [upcoming, SetUpcoming] = React.useState([]);
 
+
+//console.log(itemid,itemUrl,itemTitle,itemSynopsis)
+
   React.useEffect(()=>{
     fetch(`https://api.jikan.moe/v4/seasons/now?limit=7`)
     .then(re => re.json())
     .then((re) => {
       SetAiring(re.data);
-      console.log(airingNow);
 
   })
   },[]);
@@ -53,13 +55,14 @@ React.useEffect(()=>{
   .then(re => re.json())
   .then((re) => {
     SetUpcoming(re.data);
-
 })
 },[]);
 
   let temp = airingNow;
   let temp2 = topAnime;
   let temp3 = upcoming;
+  
+
 
   return (
     <View style={styles.see2}>
@@ -103,7 +106,9 @@ React.useEffect(()=>{
                 itemUrl:temp[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:temp[index]["title"],
                 itemsmallUrl:temp[index]["images"]["jpg"]["small_image_url"],
-                itemSynopsis: temp[index]["synopsis"]});
+                itemSynopsis: temp[index]["synopsis"],
+                itemScore: temp[index]["score"]
+              });
 
               
               }}>
@@ -118,8 +123,10 @@ React.useEffect(()=>{
             <View style={{width: setWidth(30)}}>
                 
                 <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
-                {item.title_english ? item.title_english : item.title }
-
+                {item.title_english ? item.title_english : item.title}
+                </Text>
+                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
+                Rating: {item.score}
                 </Text>
 
                 </View>
@@ -150,7 +157,7 @@ React.useEffect(()=>{
           key={1}
           keyExtractor={(item) => item.mal_id}
           renderItem={({item,index}) => (        
-            <View style={styles.item}key={index}>
+            <View style={styles.item} key={index}>
             <TouchableOpacity onPress={(item) => {
                 navigation.navigate("Anime Detail",{
                 itemid: temp3[index]["mal_id"],
@@ -159,7 +166,6 @@ React.useEffect(()=>{
                 itemTitle:temp3[index]["title"],
                 itemSynopsis: temp3[index]["synopsis"]});
 
-              
               }}>
                 <Image
                     source={{
@@ -173,7 +179,9 @@ React.useEffect(()=>{
                 
                 <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
                 {item.title_english ? item.title_english : item.title }
-
+                </Text>
+                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
+                Rating:  {item.score  ? item.score : "0.0"}
                 </Text>
 
                 </View>
@@ -211,7 +219,8 @@ React.useEffect(()=>{
                 itemUrl:temp2[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:temp2[index]["title"],
                 itemsmallUrl:temp3[index]["images"]["jpg"]["small_image_url"],
-                itemSynopsis: temp2[index]["synopsis"]});
+                itemSynopsis: temp2[index]["synopsis"],
+                itemScore: temp[index]["score"]});
 
               
               }}>
@@ -227,7 +236,9 @@ React.useEffect(()=>{
                 
                 <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
                 {item.title_english ? item.title_english : item.title }
-
+                </Text>
+                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
+                Rating: {item.score}
                 </Text>
 
                 </View>
