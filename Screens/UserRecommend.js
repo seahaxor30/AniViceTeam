@@ -143,7 +143,7 @@ const UserRecommend = ({route,navigation}) => {
   return (
     <View style={{backgroundColor:color,height:"100%"}}>
     <View>
-    <View style={{width:setWidth(20),height:setHeight(3),marginTop:50,marginLeft:"73%",backgroundColor:"#057DFE",borderRadius:10,justifyContent:"center"}}>
+    <View style={{width:setWidth(20),height:setHeight(4),marginTop:35,marginLeft:"77%",backgroundColor:"#057DFE",borderRadius:10,justifyContent:"center"}}>
     <TouchableOpacity onPress={navigater}>
       <Text style={{alignSelf:"center",color:"white",fontSize:18}}>Back</Text>
     </TouchableOpacity>
@@ -202,6 +202,12 @@ const UserRecommend = ({route,navigation}) => {
                   itemTitle: search[index]["itemTitle"],
                   itemUrl: search[index]["itemUrl"],
                   itemid: search[index]["itemid"],
+                  itemGenres: search[index]["itemGenres"],
+                  itemStatus:search[index]["itemStatus"],
+                  itemRating:search[index]["itemRating"],
+                  itemSeason:search[index]["itemSeason"],
+                  itemYear:search[index]["itemYear"],
+                  itemScore: search[index]["itemScore"],
 
                 });          
               }}>

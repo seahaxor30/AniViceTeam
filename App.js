@@ -22,7 +22,9 @@ import UserRecommend from './Screens/UserRecommend';
 import CreateDiscuss from './Screens/createDiscuss';
 import Discuss from './Screens/discuss';
 import CreateComment from './Screens/createComment';
+import Images from './Screens/Images';
 import { LogBox } from 'react-native';
+
 
 // Ignore log notification by message
 LogBox.ignoreLogs(['Warning: ...']);
@@ -54,6 +56,10 @@ export default function App() {
     <Stack.Screen name = "Create Discussion" component = {CreateDiscuss} options={{headerShown: true}}/>
     <Stack.Screen name = "Discuss" component = {Discuss} options={{headerShown: false}}/>
     <Stack.Screen name = "Create Comment" component = {CreateComment} options={{headerShown: true}}/>
+    <Stack.Screen name = "Images" component = {Images} options={{headerShown: true}}/>
+
+
+
 
 
 

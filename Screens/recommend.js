@@ -207,6 +207,14 @@ const Recommend = ({route,navigation}) => {
                   itemTitle: search[index]["itemTitle"],
                   itemUrl: search[index]["itemUrl"],
                   itemid: search[index]["itemid"],
+                  itemGenres: search[index]["itemGenres"],
+                  itemStatus:search[index]["itemStatus"],
+                  itemRating:search[index]["itemRating"],
+                  itemSeason:search[index]["itemSeason"],
+                  itemYear:search[index]["itemYear"],
+                  itemScore: search[index]["itemScore"],
+                  
+
 
                 });          
               }}>
@@ -223,6 +231,115 @@ const Recommend = ({route,navigation}) => {
                     style={styles.container}
                     resizeMode="cover"
                 />
+                {item.itemScore > 0 && item.itemScore <= 3 &&
+
+                  <View style={{backgroundColor:"#FF0000",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,    
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+                  {item.itemScore > 3 && item.itemScore <= 5 &&
+                  <View style={{backgroundColor:"#FF8822",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+                  {item.itemScore > 5 && item.itemScore <= 7 &&
+                  <View style={{backgroundColor:"#FFCC33",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+                  {item.itemScore > 7 && item.itemScore <= 8 &&
+                  <View style={{backgroundColor:"#B3CC33",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                      <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+
+                  {item.itemScore > 8 && item.itemScore <= 10 &&
+                  <View style={{backgroundColor:"#66CC33",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                      <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+                  {item.itemScore == null &&
+                  <View style={{backgroundColor:"#cccccc",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>NA</Text>
+
+
+                      </View>
+                  }
             </View>
                 <View style = {styles.container3}>
                 <Text style={{fontSize: 16,fontWeight: "bold"}}

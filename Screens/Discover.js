@@ -1,7 +1,8 @@
 import ItemSeparator from "../components/ItemSeperator"
 
 import Searchbar from "../components/SearchBar";
-import { Ionicons} from '@expo/vector-icons';
+import { Ionicons,MaterialIcons
+} from '@expo/vector-icons';
 import AnimeList from "../components/flatlist";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const { width,height } = Dimensions.get("screen");
@@ -115,18 +116,136 @@ React.useEffect(()=>{
           keyExtractor={(item) => item.mal_id}
           renderItem={({item,index}) => (        
             <View style={styles.item} key={index}>
+            {item.score > 0 && item.score <= 3 &&
+
+            <View style={{backgroundColor:"#FF0000",
+                zIndex:1,
+                top:35,
+                left:"80%",
+                margin:-15,
+                width:40,
+                height:40,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+              <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+            {item.score > 3 && item.score <= 5 &&
+            <View style={{backgroundColor:"#FF8822",
+                zIndex:1,
+                top:35,
+                left:"80%",
+                margin:-15,
+                width:40,
+                height:40,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+              <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+            {item.score > 5 && item.score <= 7 &&
+            <View style={{backgroundColor:"#FFCC33",
+                zIndex:1,
+                top:35,
+                left:"80%",
+                margin:-15,
+                width:40,
+                height:40,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+              <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+            {item.score > 7 && item.score <= 8 &&
+            <View style={{backgroundColor:"#B3CC33",
+                zIndex:1,
+                top:35,
+                left:"80%",
+                margin:-15,
+                width:40,
+                height:40,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+
+            {item.score > 8 && item.score <= 10 &&
+            <View style={{backgroundColor:"#66CC33",
+                zIndex:1,
+                top:35,
+                left:"80%",
+                margin:-15,
+                width:40,
+                height:40,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+            {item.score == null &&
+            <View style={{backgroundColor:"#cccccc",
+                zIndex:1,
+                top:35,
+                left:"80%",
+                margin:-15,
+                width:40,
+                height:40,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+              <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>NA</Text>
+
+
+                </View>
+            }
+            
+            <View style={{zIndex:0}}>
             <TouchableOpacity onPress={(item) => {
                 navigation.navigate("Anime Detail",{
                 itemid: temp[index]["mal_id"],
                 itemUrl:temp[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:temp[index]["title"],
-                itemsmallUrl:temp[index]["images"]["jpg"]["small_image_url"],
+                itemEnglishTitle:temp[index]["title_english"],
                 itemSynopsis: temp[index]["synopsis"],
-                itemScore: temp[index]["score"]
+                itemScore: temp[index]["score"],
+                itemGenres:temp[index]["genres"],
+                itemStatus:temp[index]["status"],
+                itemRating:temp[index]["rating"],
+                itemSeason:temp[index]["season"],
+                itemYear:temp[index]["year"]
+
               });
 
               
               }}>
+                
                 <Image
                     source={{
                         uri: item.images.jpg.image_url,
@@ -135,14 +254,13 @@ React.useEffect(()=>{
                     resizeMode="cover"
                 />
             </TouchableOpacity>
+            </View>
             <View style={{width: setWidth(30)}}>
                 
                 <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
                 {item.title_english ? item.title_english : item.title}
                 </Text>
-                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
-                Rating: {item.score}
-                </Text>
+                
 
                 </View>
         </View>
@@ -154,7 +272,7 @@ React.useEffect(()=>{
           <AnimeList id={0}/>
         }*/}
       </View>
-      <View style={styles.headerContainer}>
+      <View style={[styles.headerContainer,{marginTop:"0%"}]}>
         <Text style={styles.headerTitle}>Upcoming Anime</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Upcoming Anime")}>
           <Text style={styles.headerSubTitle}>VIEW ALL</Text>
@@ -172,12 +290,40 @@ React.useEffect(()=>{
           keyExtractor={(item) => item.mal_id}
           renderItem={({item,index}) => (        
             <View style={styles.item} key={index}>
+              
+            {/*<Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
+                Rating:  {item.score  ? item.score : "0.0"}
+                </Text>*/}
+            
+            <View style={{backgroundColor:"#cccccc",
+                zIndex:1,
+                top:35,
+                left:"80%",
+                margin:-15,
+                width:40,
+                height:40,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>NA</Text>
+
+                </View>
+            
+            <View style={{zIndex:0}}>
             <TouchableOpacity onPress={(item) => {
                 navigation.navigate("Anime Detail",{
                 itemid: temp3[index]["mal_id"],
                 itemUrl:temp3[index]["images"]["jpg"]["large_image_url"],
                 itemsmallUrl:temp3[index]["images"]["jpg"]["small_image_url"],
                 itemTitle:temp3[index]["title"],
+                itemEnglishTitle:temp3[index]["title_english"],
+                itemGenres:temp3[index]["genres"],
+                itemStatus:temp3[index]["status"],
+                itemRating:temp3[index]["rating"],
+                itemSeason:temp3[index]["season"],
+                itemYear:temp3[index]["year"],
+
                 itemSynopsis: temp3[index]["synopsis"]});
 
               }}>
@@ -189,13 +335,11 @@ React.useEffect(()=>{
                     resizeMode="cover"
                 />
             </TouchableOpacity>
+            </View>
             <View style={{width: setWidth(30)}}>
                 
                 <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
                 {item.title_english ? item.title_english : item.title }
-                </Text>
-                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
-                Rating:  {item.score  ? item.score : "0.0"}
                 </Text>
 
                 </View>
@@ -226,14 +370,38 @@ React.useEffect(()=>{
           keyExtractor={(item) => item.mal_id}
           renderItem={({item,index}) => (        
             <View style={[styles.item,{marginBottom:30}]}key={index}>
+            <View style={{backgroundColor:"#66CC33",
+                zIndex:1,
+                top:35,
+                left:"80%",
+                margin:-15,
+                width:40,
+                height:40,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10) ? Math.round(item.score * 10) : "NR"}
+                </Text>
+
+                </View>
+            <View style={{zIndex:0}}>
             <TouchableOpacity onPress={(item) => {
                 navigation.navigate("Anime Detail",{
                 itemid: temp2[index]["mal_id"],
                 itemUrl:temp2[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:temp2[index]["title"],
-                itemsmallUrl:temp3[index]["images"]["jpg"]["small_image_url"],
+                itemGenres:temp2[index]["genres"],
+                itemEnglishTitle:temp2[index]["title_english"],
+                itemsmallUrl:temp2[index]["images"]["jpg"]["small_image_url"],
                 itemSynopsis: temp2[index]["synopsis"],
-                itemScore: temp[index]["score"]});
+                itemStatus:temp2[index]["status"],
+                itemRating:temp2[index]["rating"],
+                itemSeason:temp2[index]["season"],
+                itemYear:temp2[index]["year"],
+
+                itemScore: temp2[index]["score"]});
 
               
               }}>
@@ -245,14 +413,13 @@ React.useEffect(()=>{
                     resizeMode="cover"
                 />
             </TouchableOpacity>
+            </View>
             <View style={{width: setWidth(30)}}>
                 
                 <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
                 {item.title_english ? item.title_english : item.title }
                 </Text>
-                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
-                Rating: {item.score}
-                </Text>
+               
 
                 </View>
         </View>
@@ -375,7 +542,8 @@ searchContainer:
     marginHorizontal:-10,
     marginVertical: 2,
     width:setWidth(35), 
-    height:setHeight(25)
+    height:setHeight(25),
+    
   },
   itemText: {
     marginTop: 5,
