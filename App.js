@@ -48,11 +48,11 @@ export default function App() {
     <Stack.Screen name = "Login" component = {LoginScreen} options={{headerShown: false}}/>
     <Stack.Screen name = "Change Profile Picture" component = {PfpEditor} options={{headerShown: true}}/>
     <Stack.Screen name = "Create Recommendation" component = {CreateRec} options={{headerShown: true}}/>
-    <Stack.Screen name = "Recommend" component = {Recommend} options={{headerShown: true}}/>
+    <Stack.Screen name = "Recommend" component = {Recommend} options={{headerShown: false}}/>
     <Stack.Screen name = "Search Recommendation" component = {SearchRec} options={{headerShown: true}}/>
-    <Stack.Screen name = "User Recommend" component = {UserRecommend} options={{headerShown: true}}/>
+    <Stack.Screen name = "User Recommend" component = {UserRecommend} options={{headerShown: false}}/>
     <Stack.Screen name = "Create Discussion" component = {CreateDiscuss} options={{headerShown: true}}/>
-    <Stack.Screen name = "Discuss" component = {Discuss} options={{headerShown: true}}/>
+    <Stack.Screen name = "Discuss" component = {Discuss} options={{headerShown: false}}/>
     <Stack.Screen name = "Create Comment" component = {CreateComment} options={{headerShown: true}}/>
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text,View,Alert,TouchableOpacity,StyleSheet,SafeAreaView,FlatList,Image,Dimensions} from "react-native";
+import { Text,View,Alert,TouchableOpacity,StyleSheet,SafeAreaView,FlatList,Image,Dimensions,ActivityIndicator} from "react-native";
 import List from "../components/list"
 import SearchBar from "../components/SearchBar";
 import ItemSeparator from "../components/ItemSeperator";
@@ -10,6 +10,8 @@ import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { updateDoc,setDoc,doc, getFirestore, setDocs, getDoc } from "firebase/firestore";
 import { authenication } from "../firebase";
 import Toast from 'react-native-toast-message';
+import Divider from "../components/flatlistDivider";
+
 
 
 
@@ -28,12 +30,15 @@ const wait = (timeout) => {
 const  SearchRec = ({route,navigation}) =>{
     const currUser = authenication.currentUser;
     const db = getFirestore()
-    const [ search, setSearch] = React.useState([]);
+    const [ search, setSearch] = React.useState(null);
     const {title,postId} = route.params;
     const [visible, setVisible] = React.useState(false);
     const isFocused = useIsFocused();
     const [isBusy, setBusy] = React.useState(true)
     const [num,setNum] = React.useState(0)
+    const [check,setCheck] = React.useState(false);
+
+
 
     const [anime, setAnime] = React.useState({});
     const [animeUrl, setAnimeUrl] = React.useState('');
@@ -48,11 +53,18 @@ const  SearchRec = ({route,navigation}) =>{
    
 
     React.useEffect(()=>{
-        fetch(`https://api.jikan.moe/v4/anime?q=${title}`)
+        fetch(`https://api.jikan.moe/v4/anime?q=${title}&sfw`)
         .then(re => re.json())
         .then((re) => {
             setSearch(re.data);
             setBusy(false);
+            const data = re.data  
+            if (data.length > 0) {
+              setCheck(false)
+            }
+            else{
+              setCheck(true)
+            }
 
             
     
@@ -79,7 +91,22 @@ const  SearchRec = ({route,navigation}) =>{
     };
     const updateUser = async (map) => {
         const recId = postId + map.itemid + "-" + currUser.uid
-        console.log(recId)
+        const genreList = map.genres
+        let genres = [];
+        for (let i = 0; i < genreList.length;i++){
+            if (i !== genreList.length - 1){
+            genres.push(genreList[i]["name"] + ", ")
+            }
+            else{
+                genres.push(genreList[i]["name"])
+            }
+        }
+        console.log("-----")
+        console.log(genres)
+        console.log("-----")
+
+
+
 
 
         const snap = await getDoc(doc(db,`Posts/${postId}/recs`,recId))
@@ -101,11 +128,13 @@ const  SearchRec = ({route,navigation}) =>{
                 itemid: map.itemid,
                 itemUrl:map.itemUrl,
                 itemTitle: map.itemTitle,
+                itemEnglishTitle: map.itemEnglishTitle,
                 itemSynopsis: map.itemSynopsis,
                 userRecId: currUser.uid,
                 userName: currUser.displayName,
                 userUrl: currUser.photoURL,
-                recId: recId
+                recId: recId,
+                genres: genres
             })
             const addPostNum = async () => {
                 const recNumber = num + 1
@@ -140,17 +169,29 @@ const  SearchRec = ({route,navigation}) =>{
     //    console.log(anime)
 
     //}
+    if (check == true) {
+        return (
+          <View style={{alignItems:"center",justifyContent:"center",flex:1}}>
+            <Text>
+              Couldn't Find "{title}"
+            </Text>
+          </View>
+          
+  
+        );
+      }
     return(
-      <SafeAreaView style={styles.root}>
-          {/*<TouchableOpacity onPress={()=>{console.log(anime)}}>
-              <Text>TEST</Text>
-          </TouchableOpacity>*/}
-      <FlatList style={styles.flatlist} 
+     <View style={{margin:0, backgroundColor:""}}>
+      {search == null && <View style={{height:"100%",justifyContent:"center",alignItems:"center"}}>
+      <ActivityIndicator size="large" color="#057DFE" />
+        </View>}
+      {search != null &&
+      <FlatList style={{backgroundColor:"white",height:"100%"}} 
                 data={search}
-                ItemSeparatorComponent={() =><ItemSeparator height={10}width={20}/>}
-                ListHeaderComponent={() =><ItemSeparator height={20}/>}
-                ListFooterComponent={() =><ItemSeparator height={30}/>}
-                keyExtractor={(item) => String(item.mal_id)}
+                ItemSeparatorComponent={() =><Divider/>}
+                ListHeaderComponent={() =><ItemSeparator height={0}/>}
+                ListFooterComponent={() =><ItemSeparator height={20}/>}
+                keyExtractor={(item) => item.mal_id}
                 renderItem={({item,index}) => (
                 <TouchableOpacity style={styles.container5}onPress={(item) => {
 
@@ -158,17 +199,15 @@ const  SearchRec = ({route,navigation}) =>{
                 itemid: search[index]["mal_id"],
                 itemUrl:search[index]["images"]["jpg"]["image_url"],
                 itemTitle:search[index]["title"],
+                itemGenres:search[index]["genres"],
                 itemSynopsis: search[index]["synopsis"]});           
               }}>
-                <View>
-                <View style={styles.box}>
-                
-                <Text style = {styles.container3}>
-                    {item.title_english ? item.title_english : item.title }
-                </Text>
-
-                </View>
-                <View styles={styles.container}>
+              <View style={styles.box}>
+                <View style={{ shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 3,  
+                  elevation: 5}}>
                     <Image
                     source={{
                         uri: item.images.jpg.image_url,
@@ -177,19 +216,46 @@ const  SearchRec = ({route,navigation}) =>{
                     resizeMode="cover"
                 />
             </View>
-        </View>
+                <View style = {styles.container3}>
+                <Text style={{fontSize: 20,fontWeight: "bold"}}
+                ellipsizeMode='tail' numberOfLines={3}>
+                  {item.title_english ? item.title_english : item.title }
+                </Text>
+                <View style={{flexDirection:"row",flexWrap:"wrap"}}>
+                  {item.genres.map((genre,index)=> {
+                    if (index != item.genres.length - 1) {
+                    return (
+                     <Text style={{color:"#6D7275"}}>{genre.name + ", "}</Text>
+
+                    )}else{
+                      return (
+                     <Text style={{color:"#6D7275"}}>{genre.name}</Text>)
+                    }}
+                  
+                  )}
+
+                </View>
+                </View>
+               
+
+                
+                
+                
+                </View>
         <TouchableOpacity 
             style={{position:"absolute",left:"80%",bottom:"5%"}}
             onPress={() => {
                 toggleOverlay({
                 itemid: search[index]["mal_id"],
+                genres: search[index]["genres"],
                 itemUrl:search[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:search[index]["title"],
+                itemEnglishTitle:search[index]["title_english"],
                 itemSynopsis: search[index]["synopsis"]});
                
             }}>
 
-            <Ionicons name="bookmark" size={70} color="#057DFE" />
+            <Ionicons name="bookmark" size={50} color="#057DFE" />
         </TouchableOpacity>
         {isBusy != true && 
         <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{width:"90%",height:"70%"}}>
@@ -201,7 +267,7 @@ const  SearchRec = ({route,navigation}) =>{
             onPress={() => {
                     updateUser(anime);
                     toggleOverlay({});
-                    console.log(anime);
+                    {/*console.log(anime);*/}
 
 
                     {/*navigation.navigate("Search Recommendation",{
@@ -227,84 +293,170 @@ const  SearchRec = ({route,navigation}) =>{
                 showsHorizontalScrollIndicator={false}/>
                
 
-     
-    </SafeAreaView>
+      }
+      </View>
   );
 };
 
 export default SearchRec;
 
+//const styles = StyleSheet.create({
+//  root: {
+//    margin:10,
+//    justifyContent: "center",
+//    //alignItems: "center",
+//  },
+//  container5:{
+//      backgroundColor: "white",
+//      borderRadius:12,
+//    //  width: setWidth(100),
+//      height:setHeight(18)
+
+
+//  },
+//  title: {
+//    width: "100%",
+//    marginTop: 20,
+//    fontSize: 25,
+//    fontWeight: "bold",
+//    marginLeft: "10%",
+//  },
+//  title2: {
+//    //width: "100%",
+//    marginBottom: 10,
+//    margin:10,
+//    marginStart:20,
+//    fontSize: 15,
+//    fontWeight: "bold",
+//    //marginLeft: "10%",
+//  },
+
+//  container: {
+//    justifyContent: "center",
+//    alignItems:"center",
+//    borderRadius: 12,
+//    borderTopEndRadius:0,
+//    borderBottomEndRadius:0,
+//    backgroundColor: "#057DFE",
+//    paddingVertical: 8,
+//    bottom:"100%",
+//    width:setWidth(30), 
+//    height:setHeight(18)
+
+
+
+//},
+
+//container3:{
+//    fontSize: 20,
+//    fontWeight: "bold",
+//    flex: 1, 
+//    height:setHeight(10),
+
+//},
+//box:{
+//    flexDirection:"row",
+//    marginStart:setWidth(35),
+//    paddingVertical: 30,
+//    alignItems: "center",
+//    width:setWidth(55),
+//    height:setHeight(18),
+// },
+//overlayImage: {
+//    height: "70%",
+//    width: windowWidth / 1.3,
+//    borderRadius: 10,
+//    marginStart:15,
+//    margin:5
+
+//  },
+
+
+//});
+
 const styles = StyleSheet.create({
-  root: {
-    margin:10,
-    justifyContent: "center",
-    //alignItems: "center",
-  },
-  container5:{
+    root: {
+   
       backgroundColor: "white",
-      borderRadius:12,
-    //  width: setWidth(100),
-      height:setHeight(18)
-
-
+      
+    },
+  
+    container5:{
+        //backgroundColor: "white",
+        //borderRadius: 12,
+        //marginStart:20,
+        //justifyContent:"center",
+  
+  
+      //  width: setWidth(100),
+        //height:setHeight(22)
+  
+  
+    },
+    title: {
+      width: "100%",
+      marginTop: 20,
+      fontSize: 25,
+      fontWeight: "bold",
+      marginLeft: "10%",
+    },
+  
+    container: {
+      borderRadius: 12,
+      width:setWidth(25), 
+      height:setHeight(16),
+  
+  
+  
   },
-  title: {
-    width: "100%",
-    marginTop: 20,
-    fontSize: 25,
-    fontWeight: "bold",
-    marginLeft: "10%",
+  
+  containerUser: {
+      //backgroundColor:"yellow",
+      //margin:10,
+      //justifyContent: "center",
+      //alignItems:"center",
+      //flex: 1, 
+      //backgroundColor:"blue",
+      height:setHeight(10),
+      width:setWidth(10),
+      borderRadius: 100,
+  
+  
+  
+  
   },
-  title2: {
-    //width: "100%",
-    marginBottom: 10,
-    margin:10,
-    marginStart:20,
-    fontSize: 15,
-    fontWeight: "bold",
-    //marginLeft: "10%",
+  
+  container3:{
+      fontSize: 16,
+      fontWeight: "bold",
+      marginStart:"10%",
+      marginBottom:"10%",
+      //backgroundColor:"yellow",
+      //height:"100%",
+      width:"100%",
+      //justifyContent: "center",
+      //height:setHeight(10),
+  
+  
+  
+  
+  
   },
-
-  container: {
-    justifyContent: "center",
-    alignItems:"center",
-    borderRadius: 12,
-    borderTopEndRadius:0,
-    borderBottomEndRadius:0,
-    backgroundColor: "#057DFE",
-    paddingVertical: 8,
-    bottom:"100%",
-    width:setWidth(30), 
-    height:setHeight(18)
-
-
-
-},
-
-container3:{
-    fontSize: 20,
-    fontWeight: "bold",
-    flex: 1, 
-    height:setHeight(10),
-
-},
-box:{
-    flexDirection:"row",
-    marginStart:setWidth(35),
-    paddingVertical: 30,
-    alignItems: "center",
-    width:setWidth(55),
-    height:setHeight(18),
- },
-overlayImage: {
-    height: "70%",
-    width: windowWidth / 1.3,
-    borderRadius: 10,
-    marginStart:15,
-    margin:5
-
-  },
-
-
-});
-
+  box:{
+      flexDirection:"row",
+      //flex:1,
+      marginStart:setWidth(20),
+      //paddingVertical: 30,
+      marginTop:15,
+      alignItems: "center",
+      justifyContent:"center",
+      width:setWidth(55),
+      height:setHeight(18),
+      //backgroundColor:"green"
+   
+  
+  
+      //left:50
+  }
+  
+  });

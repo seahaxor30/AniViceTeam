@@ -75,8 +75,8 @@ const  LoginScreen = ({navigation}) =>{
   }
   const backToSignUp = () => {
     navigation.navigate("Sign Up")
-    setCheck(true);
-    setEyeCheck("eye-off")
+    setIsSecureEntryEnabled(true);
+    setEyeButton("eye-off");
     setEmailError("")
     setPasswordError("")
     setEmail("")
@@ -109,19 +109,6 @@ const  LoginScreen = ({navigation}) =>{
 
         return unsubscribe;
     },[]);
-    const eyeChecker = () => {
-      if (check) {
-        setCheck(false);
-        setEyeCheck("eye")
-        return
-      }
-      else{   
-        setCheck(true);     
-        setEyeCheck("eye-off");
-        return
-      }
-      
-    }
     
 
     
@@ -162,15 +149,9 @@ const  LoginScreen = ({navigation}) =>{
                 placeholder="Password"
                 value = {password}
                 right={<TextInput.Icon name={eyeButton}
-                  onPress={() => changeSecureText}
+                  onPress={() => changeSecureText()}
                />}
                 onFocus={ () => setPasswordError("") }
-                secureTextEntry = {check}
-                right={<TextInput.Icon 
-                  onPress = {() => {
-                  eyeChecker();}}
-                  name={eyeCheck}/>}
-
                 onChangeText={text => setPassword(text)}>
             </TextInput>
             </View>

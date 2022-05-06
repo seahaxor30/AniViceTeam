@@ -1,25 +1,32 @@
 import React from 'react';
-import {View,Text,StyleSheet,Dimensions,TouchableOpacity,Image} from "react-native";
+import {View,Text,StyleSheet,Dimensions,TouchableOpacity,Image, ViewBase} from "react-native";
 const { width,height } = Dimensions.get("screen");
 
 const setWidth = (w) => (width / 100) * w;
 const setHeight = (h) => (height / 100) * h;
 
 
-const AnimeCard = ({ item }) => {
+const AnimeCard = ({item}) => {
     return(
-        <View>
-                    <TouchableOpacity style = {styles.itemPhoto}>
-                        <Text style={styles.textStyle}>Anime </Text>
-                    </TouchableOpacity>
-                <View style={{width: setWidth(30)}}>
+        <View style={styles.item}>
+            <View>
+                <Image
+                    source={{
+                        uri: item.photoURL,
+                    }}
+                    style={styles.itemPhoto}
+                    resizeMode="cover"
+                />
+            </View>
+            <View style={{width: setWidth(30)}}>
                 
                 <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
-                   {item.title}
+                {item.title}
+
                 </Text>
 
                 </View>
-                </View>
+        </View>
 
     
     )
@@ -30,21 +37,33 @@ const styles = StyleSheet.create({
     item: {
         margin: 10,
       },
-      itemPhoto: {
+    itemPhoto: {
         justifyContent: "center",
         alignItems:"center",
         borderRadius: 12,
-        backgroundColor: "#057DFE",
         paddingVertical: 8,
-        elevation: 5,
+        marginHorizontal:-10,
         marginVertical: 2,
         width:setWidth(35), 
         height:setHeight(25)
+      },
+      photo:{
+        justifyContent: "center",
+        alignItems:"center",
+        //backgroundColor: "white",
+        paddingVertical: 8,
+        marginVertical: 2,
+        width:setWidth(35), 
+        height:setHeight(25)
+
       },
       itemText: {
         //color: 'b',
         marginTop: 5,
       },
+      item:{
+          margin:10
+      }
      
     
     

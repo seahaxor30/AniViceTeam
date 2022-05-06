@@ -1,5 +1,5 @@
 import React from "react";
-import { Text,View,Button,Alert,TouchableOpacity,ScrollView,StyleSheet,FlatList,Dimensions,Image} from "react-native";
+import { Text,View,Button,Alert,ActivityIndicator,TouchableOpacity,ScrollView,StyleSheet,FlatList,Dimensions,Image} from "react-native";
 import ItemSeparator from "../components/ItemSeperator";
 
 
@@ -12,7 +12,7 @@ const setHeight = (h) => (height / 100) * h;
 const UpcomingScreen = ({navigation}) => {
     const [ airingNow, SetAiring] = React.useState([]);
     const [topAnime, SetTopAnime] = React.useState([]);
-    const [ upcoming, SetUpcoming] = React.useState([]);
+    const [ upcoming, SetUpcoming] = React.useState(null);
     React.useEffect(()=>{
         fetch(`https://api.jikan.moe/v4/seasons/upcoming`)
         .then(re => re.json())
@@ -24,6 +24,9 @@ const UpcomingScreen = ({navigation}) => {
     return(
         
         <View style={styles.container2}>
+        {upcoming == null && <View style={{height:"100%",justifyContent:"center",alignItems:"center"}}>
+            <ActivityIndicator size="large" color="#057DFE" />
+        </View>}
             <FlatList style={styles.flatlist} 
                 data={upcoming}
                 ItemSeparatorComponent={() =><ItemSeparator height={10}width={20}/>}
