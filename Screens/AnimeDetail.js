@@ -62,7 +62,16 @@ const getData =  async() => {
 
 	console.log(`Community score: ` + communityScore)
 }
+const [textShown, setTextShown] = React.useState(false); //To show ur remaining Text
+const [lengthMore,setLengthMore] = React.useState(false); //to show the "Read more & Less Line"
+const toggleNumberOfLines = () => { //To toggle the show text or hide it
+    setTextShown(!textShown);
+}
 
+const onTextLayout = React.useCallback(e =>{
+  setLengthMore(e.nativeEvent.lines.length >=4); //to check the text is more than 4 lines or not
+  // console.log(e.nativeEvent);
+},[]);
 
 let check = "";
 let color;
@@ -112,9 +121,17 @@ const saveCard = async (key,value) => {
 		<Text style={{marginTop:"2%",fontSize:25,fontWeight:"bold"}}>
 			Synopsis
 		</Text>
-          <Text style={styles.itemText}>
-			{itemSynopsis}
-        </Text>
+    <Text
+              onTextLayout={onTextLayout}
+              numberOfLines={textShown ? undefined : 4}
+              style={styles.itemText}>{itemSynopsis}</Text>
+
+              {
+                  lengthMore ? <Text
+                  onPress={toggleNumberOfLines}
+                  style={{ lineHeight: 21, marginTop: 5,color:"#057DFE", fontWeight:"bold" }}>{textShown ? 'Read less...' : 'Read more...'}</Text>
+                  :null
+              }
         </View>
         </View>
 
