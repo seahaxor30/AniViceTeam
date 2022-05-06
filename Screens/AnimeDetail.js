@@ -147,8 +147,6 @@ const onTextLayout = React.useCallback(e =>{
   // console.log(e.nativeEvent);
 },[]);
 
-
-
 let check = "";
 let color;
 navigation.setOptions({title: itemTitle});
@@ -368,8 +366,8 @@ const saveCard = async (key,value) => {
         </Text>
 		<Text style={{marginTop:"2%",fontSize:25,fontWeight:"bold"}}>
 			Synopsis
-      </Text>
-      <Text
+		</Text>
+    <Text
               onTextLayout={onTextLayout}
               numberOfLines={textShown ? undefined : 4}
               style={styles.itemText}>{itemSynopsis}</Text>
