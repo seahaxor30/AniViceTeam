@@ -266,10 +266,6 @@ const Watchlist = ({ navigation }) => {
 
                 </View>
                 </View>
-               
-
-                
-                
                 
                 </View>
                 {i != localStorage.length - 1 &&
@@ -279,43 +275,6 @@ const Watchlist = ({ navigation }) => {
                   <View style={{height:20}}></View>
                 }
 
-
-
-{/*
-           <Card style = {styles.cardStyle} elevation = {2} onPress = {() => {
-                navigation.navigate("Anime Detail", 
-            {
-              itemTitle: parsed["t"], 
-              itemSynopsis: parsed["d"], 
-              itemUrl: parsed["pic"], 
-              itemid: parsed["id"],
-              itemScore: parsed["score"],
-              itemGenres: parsed["genre"],
-              itemStatus: parsed["status"],
-              itemRating:parsed["rating"],
-              itemSeason:parsed["season"],
-              itemYear: parsed["year"]
-            }
-          );
-          }} key = {i} 
-          onLongPress = {() => {
-            removeSavedDigest(parsed["t"]);
-            refresh();
-            Toast.show({
-              type: 'success',
-              text1: 'Removed Anime from Watchlist',
-              text2: parsed["t"]
-            });
-          }}
-        >
-          <Card.Cover source={{ uri: parsed["pic"] }} style={styles.test}
-          
-          />
-          <Card.Content>
-              <Title>{parsed["t"].slice(0,50)}</Title>
-          </Card.Content>
-      </Card>*/}
-
             </TouchableOpacity>
         
 
@@ -324,18 +283,6 @@ const Watchlist = ({ navigation }) => {
     });
   }
 
-  //const setUserCred = () => {
-  //  const auth = getAuth();
-  //  const user = auth.currentUser;
-  //  if(user !== null){
-  //    const displayName = user.displayName;
-  //    const photoURL = user.photoURL;
-  //    setUsername(displayName);
-  //    setIcon(photoURL);
-  //    console.log(user.uid, "<------");
-  //    console.log(user.displayName, "<------");
-  //  }
-  //}
 
 
   React.useEffect(() => {
@@ -364,11 +311,6 @@ const styles = StyleSheet.create({
   container1: {
     //flex: 1,
     backgroundColor:"white",
-
-    
-    //alignItems: "center",
-    //paddingTop: - (windowHeight/3),
-    //paddingBottom: - (windowHeight/30),
   },
   userInfoSection: {
     paddingHorizontal: 30,

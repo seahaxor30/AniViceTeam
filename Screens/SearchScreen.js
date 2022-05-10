@@ -79,11 +79,24 @@ const  SearchScreen = ({route,navigation}) =>{
                 itemSynopsis: search[index]["synopsis"]});           
               }}>
                 <View style={styles.box}>
+                <View style={{ shadowColor: '#000', zIndex:0,
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.4,
+                  shadowRadius: 2,  
+                  elevation: 5}}>
+                    <Image
+                    source={{
+                        uri: item.images.jpg.image_url,
+                    }}
+                    style={styles.container}
+                    resizeMode="cover"
+                />
+           
                 {item.score > 0.0 && item.score <= 3 &&
             <View style={{backgroundColor:"#FF0000",
                 zIndex:1,
                 bottom:50,
-                left:"58%",
+                left:"20%",
                 margin:-15,
                 width:35,
                 height:35,
@@ -136,8 +149,9 @@ const  SearchScreen = ({route,navigation}) =>{
             {item.score > 7 && item.score <= 8 &&
             <View style={{backgroundColor:"#B3CC33",
                 zIndex:1,
-                bottom:50,
-                left:"58%",
+                bottom:"10%",
+                left:"75%",
+
                 margin:-15,
                 width:35,
                 height:35,
@@ -186,22 +200,6 @@ const  SearchScreen = ({route,navigation}) =>{
 
                 </View>
             }
-
-
-
-
-                <View style={{ shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.4,
-                  shadowRadius: 2,  
-                  elevation: 5}}>
-                    <Image
-                    source={{
-                        uri: item.images.jpg.image_url,
-                    }}
-                    style={styles.container}
-                    resizeMode="cover"
-                />
             </View>
                 <View style = {styles.container3}>
                 <Text style={{fontSize: 20,fontWeight: "bold"}}
