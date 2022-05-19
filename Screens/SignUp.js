@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions,Animated,Keyboard} from "react-native";
+import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions,Animated,Keyboard,Image} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -136,10 +136,15 @@ const  SignUpScreen = ({navigation}) =>{
     <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         
         <SafeAreaView style = {styles.safearea}>
-            <View style={{marginBottom:60}}>
-            <Text style={{fontSize:30}}>
-                Sign Up
-            </Text>
+        <View style={{marginBottom:10}}>
+                <Text style={{fontSize:30}}>
+                    Sign Up
+                </Text>
+                </View>
+              <View style={{height:"20%",justifyContent:"center",}}>
+                <Image source={require('../assets/http___wallpaperinfinity.net_wp-content_uploads_2019_11_Midoriya-vector-head-wallpaper-hd-800x600_ccexpress_ccexpress.png')} 
+            resizeMode="contain"
+            style={{height:150}}/>
             </View>
             <View>
             
