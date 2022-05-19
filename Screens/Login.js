@@ -1,5 +1,5 @@
 import React from "react";
-import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions} from "react-native";
+import { Text,View,Button,Alert,TouchableOpacity,StyleSheet,Dimensions,Image} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -118,12 +118,19 @@ const  LoginScreen = ({navigation}) =>{
             
             
             <SafeAreaView style = {styles.safearea}>
-                <View style={{marginBottom:60}}>
+                <View style={{marginBottom:10}}>
                 <Text style={{fontSize:30}}>
                     Login
                 </Text>
                 </View>
+              <View style={{height:"20%",justifyContent:"center",}}>
+                <Image source={require('../assets/http___wallpaperinfinity.net_wp-content_uploads_2019_11_Midoriya-vector-head-wallpaper-hd-800x600_ccexpress_ccexpress.png')} 
+            resizeMode="contain"
+            style={{height:150}}/>
+            </View>
             <View>
+            
+
             {emailError.length > 0 &&
                   <Text style={{color:"red",marginStart:10}}>{emailError}</Text>
                 }
