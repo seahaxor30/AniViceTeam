@@ -14,7 +14,7 @@ const UpcomingScreen = ({navigation}) => {
     const [topAnime, SetTopAnime] = React.useState([]);
     const [ upcoming, SetUpcoming] = React.useState(null);
     React.useEffect(()=>{
-        fetch(`https://api.jikan.moe/v4/seasons/upcoming`)
+        fetch(`https://api.jikan.moe/v4/seasons/upcoming?limit=24`)
         .then(re => re.json())
         .then((re) => {
           SetUpcoming(re.data);
@@ -35,6 +35,22 @@ const UpcomingScreen = ({navigation}) => {
                 keyExtractor={(item) => String(item.mal_id)}
                 renderItem={({item,index}) => (   
                 <View>
+                <View style={{backgroundColor:"#cccccc",
+                zIndex:1,
+                top:25,
+                left:"75%",
+                margin:-15,
+                width:35,
+                height:35,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10) ? Math.round(item.score * 10) : "NA"}
+                </Text>
+
+                </View>
                 <TouchableOpacity styles={styles.container} onPress={(item) => {
                 navigation.navigate("Anime Detail",{
                 itemid: upcoming[index]["mal_id"],
@@ -54,7 +70,7 @@ const UpcomingScreen = ({navigation}) => {
             </TouchableOpacity>
                 <View style={{width: setWidth(30)}}>
                 
-                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
+                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={2}>
                     {item.title_english ? item.title_english : item.title }
                 </Text>
 
@@ -79,9 +95,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems:"center",
         borderRadius: 12,
-        backgroundColor: "#057DFE",
         paddingVertical: 8,
-        elevation: 5,
         marginHorizontal:4,
         width:setWidth(30), 
         height:setHeight(18)

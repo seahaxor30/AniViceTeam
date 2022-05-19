@@ -3,7 +3,7 @@ import { Text,View,Alert,TouchableOpacity,StyleSheet,SafeAreaView,FlatList,Image
 import List from "../components/list"
 import SearchBar from "../components/SearchBar";
 import ItemSeparator from "../components/ItemSeperator";
-import { Ionicons} from '@expo/vector-icons';
+import { Ionicons,MaterialIcons,MaterialCommunityIcons} from '@expo/vector-icons';
 import { Button, Overlay, Icon } from 'react-native-elements';
 import { async } from "@firebase/util";
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
@@ -134,7 +134,14 @@ const  SearchRec = ({route,navigation}) =>{
                 userName: currUser.displayName,
                 userUrl: currUser.photoURL,
                 recId: recId,
-                genres: genres
+                genres: genres,
+                itemStatus:map.itemStatus,
+                itemRating:map.itemRating,
+                itemSeason:map.itemSeason,
+                itemYear:map.itemYear,
+                itemScore:map.itemScore,
+                itemGenres:map.itemGenres
+                
             })
             const addPostNum = async () => {
                 const recNumber = num + 1
@@ -200,9 +207,121 @@ const  SearchRec = ({route,navigation}) =>{
                 itemUrl:search[index]["images"]["jpg"]["image_url"],
                 itemTitle:search[index]["title"],
                 itemGenres:search[index]["genres"],
+                itemStatus:search[index]["status"],
+                itemRating:search[index]["rating"],
+                itemSeason:search[index]["season"],
+                itemYear:search[index]["year"],
+                itemScore: search[index]["score"],
                 itemSynopsis: search[index]["synopsis"]});           
               }}>
               <View style={styles.box}>
+              {item.score > 0.0 && item.score <= 3 &&
+            <View style={{backgroundColor:"#FF0000",
+                zIndex:1,
+                bottom:42,
+                left:"50%",
+                margin:-15,
+                width:35,
+                height:35,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+              <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+            {item.score > 3 && item.score <= 5 &&
+            <View style={{backgroundColor:"#FF8822",
+                zIndex:1,
+                bottom:42,
+                left:"50%",
+                margin:-15,
+                width:35,
+                height:35,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+              <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+            {item.score > 5 && item.score <= 7 &&
+            <View style={{backgroundColor:"#FFCC33",
+                zIndex:1,
+                bottom:42,
+                left:"50%",
+                margin:-15,
+                width:35,
+                height:35,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+              <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+            {item.score > 7 && item.score <= 8 &&
+            <View style={{backgroundColor:"#B3CC33",
+                zIndex:1,
+                bottom:42,
+                left:"50%",
+                margin:-15,
+                width:35,
+                height:35,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+
+            {item.score > 8 && item.score <= 10 &&
+            <View style={{backgroundColor:"#66CC33",
+                zIndex:1,
+                bottom:42,
+                left:"50%",
+                margin:-15,
+                width:35,
+                height:35,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            }
+            {item.score == null &&
+            <View style={{backgroundColor:"#cccccc",
+                zIndex:1,
+                bottom:42,
+                left:"50%",
+                margin:-15,
+                width:35,
+                height:35,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>NA</Text>
+
+                </View>
+            }
                 <View style={{ shadowColor: '#000',
                   shadowOffset: { width: 0, height: 1 },
                   shadowOpacity: 0.3,
@@ -243,10 +362,16 @@ const  SearchRec = ({route,navigation}) =>{
                 
                 </View>
         <TouchableOpacity 
-            style={{position:"absolute",left:"80%",bottom:"5%"}}
+            style={{position:"absolute",left:"85%",bottom:"5%"}}
             onPress={() => {
                 toggleOverlay({
                 itemid: search[index]["mal_id"],
+                itemGenres: search[index]["genres"],
+                itemStatus:search[index]["status"],
+                itemRating:search[index]["rating"],
+                itemSeason:search[index]["season"],
+                itemYear:search[index]["year"],
+                itemScore: search[index]["score"],
                 genres: search[index]["genres"],
                 itemUrl:search[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:search[index]["title"],
@@ -254,12 +379,13 @@ const  SearchRec = ({route,navigation}) =>{
                 itemSynopsis: search[index]["synopsis"]});
                
             }}>
-
-            <Ionicons name="bookmark" size={50} color="#057DFE" />
+            <View style={{backgroundColor:"#057DFE",borderRadius:5}}>
+              <MaterialCommunityIcons name="playlist-plus" size={40} color="white" />
+            </View>
         </TouchableOpacity>
         {isBusy != true && 
         <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{width:"90%",height:"70%"}}>
-                <Text style={styles.title2}>{anime.itemTitle}</Text>
+                <Text style={styles.title2} numberOfLines={1} ellipsizeMode="tail">{anime.itemTitle}</Text>
         <Image source={{uri: anime.itemUrl}} style={styles.overlayImage} />
         <Button
             style={{margin:15,marginBottom:0}}
@@ -321,15 +447,15 @@ export default SearchRec;
 //    fontWeight: "bold",
 //    marginLeft: "10%",
 //  },
-//  title2: {
-//    //width: "100%",
-//    marginBottom: 10,
-//    margin:10,
-//    marginStart:20,
-//    fontSize: 15,
-//    fontWeight: "bold",
-//    //marginLeft: "10%",
-//  },
+  //title2: {
+  //  //width: "100%",
+  //  marginBottom: 10,
+  //  margin:10,
+  //  marginStart:20,
+  //  fontSize: 15,
+  //  fontWeight: "bold",
+  //  //marginLeft: "10%",
+  //},
 
 //  container: {
 //    justifyContent: "center",
@@ -425,6 +551,24 @@ const styles = StyleSheet.create({
   
   
   },
+  title2: {
+    //width: "100%",
+    marginBottom: 10,
+    margin:10,
+    marginStart:20,
+    fontSize: 15,
+    fontWeight: "bold",
+    //marginLeft: "10%",
+  },
+
+
+  overlayImage: {
+    height: "70%",
+    width: windowWidth / 1.3,
+    borderRadius: 10,
+    marginStart:15,
+    margin:5
+ },
   
   container3:{
       fontSize: 16,
@@ -450,7 +594,7 @@ const styles = StyleSheet.create({
       marginTop:15,
       alignItems: "center",
       justifyContent:"center",
-      width:setWidth(55),
+      width:setWidth(50),
       height:setHeight(18),
       //backgroundColor:"green"
    

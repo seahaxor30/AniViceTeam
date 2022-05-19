@@ -38,11 +38,111 @@ const AiringScreen = ({navigation}) => {
                 keyExtractor={(item) => String(item.mal_id)}
                 renderItem={({item,index}) => (   
                 <View>
+                {item.score > 0 && item.score <= 3 &&
+                <View style={{backgroundColor:"#FF0000",
+                    zIndex:1,
+                    top:25,
+                    left:"75%",
+                    margin:-15,
+                    width:35,
+                    height:35,
+                    justifyContent:"center",
+                    alignItems:"center",
+                    borderRadius:5,
+                }}>
+                    <Text>
+                    {Math.round(item.score * 10)}
+                    </Text>
+
+                    </View>
+                }
+                {item.score > 3 && item.score <= 5 &&
+                <View style={{backgroundColor:"##FF8822",
+                    zIndex:1,
+                    top:25,
+                    left:"75%",
+                    margin:-15,
+                    width:35,
+                    height:35,
+                    justifyContent:"center",
+                    alignItems:"center",
+                    borderRadius:5,
+                }}>
+                    <Text>
+                    {Math.round(item.score * 10)}
+                    </Text>
+
+                    </View>
+                }
+                {item.score > 5 && item.score <= 7 &&
+                <View style={{backgroundColor:"#FFCC33",
+                    zIndex:1,
+                    top:25,
+                    left:"75%",
+                    margin:-15,
+                    width:35,
+                    height:35,
+                    justifyContent:"center",
+                    alignItems:"center",
+                    borderRadius:5,
+                }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                    {Math.round(item.score * 10)}
+                    </Text>
+
+                    </View>
+                }
+                {item.score > 7 && item.score <= 8 &&
+                <View style={{backgroundColor:"#B3CC33",
+                    zIndex:1,
+                    top:25,
+                    left:"75%",
+                    margin:-15,
+                    width:35,
+                    height:35,
+                    justifyContent:"center",
+                    alignItems:"center",
+                    borderRadius:5,
+                }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                    {Math.round(item.score * 10)}
+                    </Text>
+
+                    </View>
+                }
+
+                {item.score > 8 && item.score <= 10 &&
+                <View style={{backgroundColor:"#66CC33",
+                    zIndex:1,
+                    top:25,
+                    left:"75%",
+                    margin:-15,
+                    width:35,
+                    height:35,
+                    justifyContent:"center",
+                    alignItems:"center",
+                    borderRadius:5,
+                }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                    {Math.round(item.score * 10)}
+                    </Text>
+
+                    </View>
+                }
+            
+            
                 <TouchableOpacity styles={styles.container} onPress={(item) => {
                 navigation.navigate("Anime Detail",{
                 itemid: airingNow[index]["mal_id"],
                 itemUrl:airingNow[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:airingNow[index]["title"],
+                itemGenres:airingNow[index]["genres"],
+                itemStatus:airingNow[index]["status"],
+                itemRating:airingNow[index]["rating"],
+                itemSeason:airingNow[index]["season"],
+                itemYear:airingNow[index]["year"],
+
+                itemScore: airingNow[index]["score"],
                 itemSynopsis: airingNow[index]["synopsis"]});
 
               
@@ -57,7 +157,7 @@ const AiringScreen = ({navigation}) => {
             </TouchableOpacity>
                 <View style={{width: setWidth(30)}}>
                 
-                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
+                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={2}>
                     {item.title_english ? item.title_english : item.title }
                 </Text>
 

@@ -22,7 +22,7 @@ const PopularScreen = ({navigation}) => {
     return(
         
         <View style={styles.container2}>
-        {topAnime == null && <View style={{height:"100%",justifyContent:"center",alignItems:"center"}}>
+        {topAnime == null && <View style={{height:"95%",justifyContent:"center",alignItems:"center"}}>
             <ActivityIndicator size="large" color="#057DFE" />
         </View>}
             <FlatList style={styles.flatlist} 
@@ -33,6 +33,23 @@ const PopularScreen = ({navigation}) => {
                 keyExtractor={(item) => String(item.mal_id)}
                 renderItem={({item,index}) => (   
                 <View>
+                 <View style={{backgroundColor:"#66CC33",
+                zIndex:1,
+                top:25,
+                left:"75%",
+                margin:-15,
+                width:35,
+                height:35,
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:5,
+              }}>
+                <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                {Math.round(item.score * 10)}
+                </Text>
+
+                </View>
+            
                 <TouchableOpacity styles={styles.container} onPress={(item) => {
                 navigation.navigate("Anime Detail",{
                 itemid: topAnime[index]["mal_id"],
@@ -52,7 +69,7 @@ const PopularScreen = ({navigation}) => {
             </TouchableOpacity>
                 <View style={{width: setWidth(30)}}>
                 
-                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={1}>
+                <Text style = {styles.container3}ellipsizeMode='tail' numberOfLines={2}>
                     {item.title}
                 </Text>
 
@@ -77,9 +94,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems:"center",
         borderRadius: 12,
-        backgroundColor: "#057DFE",
         paddingVertical: 8,
-        elevation: 5,
         marginHorizontal:4,
         width:setWidth(30), 
         height:setHeight(20)
