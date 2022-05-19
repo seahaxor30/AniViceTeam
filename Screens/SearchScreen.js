@@ -95,8 +95,8 @@ const  SearchScreen = ({route,navigation}) =>{
                 {item.score > 0.0 && item.score <= 3 &&
             <View style={{backgroundColor:"#FF0000",
                 zIndex:1,
-                bottom:50,
-                left:"20%",
+                bottom:124,
+                left:"75%",
                 margin:-15,
                 width:35,
                 height:35,
@@ -113,8 +113,8 @@ const  SearchScreen = ({route,navigation}) =>{
             {item.score > 3 && item.score <= 5 &&
             <View style={{backgroundColor:"#FF8822",
                 zIndex:1,
-                bottom:50,
-                left:"58%",
+                bottom:124,
+                left:"75%",
                 margin:-15,
                 width:35,
                 height:35,
@@ -131,8 +131,8 @@ const  SearchScreen = ({route,navigation}) =>{
             {item.score > 5 && item.score <= 7 &&
             <View style={{backgroundColor:"#FFCC33",
                 zIndex:1,
-                bottom:50,
-                left:"58%",
+                bottom:124,
+                left:"75%",
                 margin:-15,
                 width:35,
                 height:35,
@@ -149,9 +149,8 @@ const  SearchScreen = ({route,navigation}) =>{
             {item.score > 7 && item.score <= 8 &&
             <View style={{backgroundColor:"#B3CC33",
                 zIndex:1,
-                bottom:"10%",
+                bottom:124,
                 left:"75%",
-
                 margin:-15,
                 width:35,
                 height:35,
@@ -169,8 +168,8 @@ const  SearchScreen = ({route,navigation}) =>{
             {item.score > 8 && item.score <= 10 &&
             <View style={{backgroundColor:"#66CC33",
                 zIndex:1,
-                bottom:50,
-                left:"58%",
+                bottom:124,
+                left:"75%",
                 margin:-15,
                 width:35,
                 height:35,
@@ -187,8 +186,8 @@ const  SearchScreen = ({route,navigation}) =>{
             {item.score == null &&
             <View style={{backgroundColor:"#cccccc",
                 zIndex:1,
-                bottom:50,
-                left:"58%",
+                bottom:124,
+                left:"75%",
                 margin:-15,
                 width:35,
                 height:35,

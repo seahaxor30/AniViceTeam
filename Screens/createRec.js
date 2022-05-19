@@ -91,17 +91,23 @@ const CreateRec = ({navigation}) => {
                     uri: avatar
                     }}>
                 </Image>
+                <View style={{width:"80%"}}>
                 <TextInput
                 autoFocus={true}
                 multiline={true}
                 numberOfLines={4}
                 value={post}
                 onChangeText={text => setPost(text)}
-                style={{flex:1, backgroundColor:"white",paddingTop:20,padding:20,borderRadius:20}}
-                placeholder="I'm looking for...">
+                style={{
+                backgroundColor:"white",
+                padding:20,
+                paddingTop:20,
+                borderRadius:12,
+                height:"85%",
+                textAlignVertical:"top"}}                    placeholder="I'm looking for...">
 
                 </TextInput>
-
+            </View>
             </View>
 
         </ScrollView>

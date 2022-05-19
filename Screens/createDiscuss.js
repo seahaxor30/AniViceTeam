@@ -17,6 +17,15 @@ const CreateDiscuss = ({navigation}) => {
 
 
     const writeNewPost = async ()=> {
+        if (discussion === undefined){
+            Toast.show({
+                type: "error",
+                text1: 'Comment Unsuccessful',
+                text2: 'Message'
+                });
+
+        }
+        else{
         const db = getDatabase();
         const dbRef = ref(getDatabase());
 
@@ -70,6 +79,7 @@ const CreateDiscuss = ({navigation}) => {
         navigation.goBack()
         return update(ref(db), updates);
       }
+    }
     
     React.useEffect(() => {
         const fetchData = async () => {
@@ -142,16 +152,24 @@ const CreateDiscuss = ({navigation}) => {
                     uri: avatar
                     }}>
                 </Image>
+                <View style={{width:"80%"}}>
                 <TextInput
                 autoFocus={true}
                 multiline={true}
-                numberOfLines={4}
+                numberOfLines={5}
                 value={discussion}
                 onChangeText={text => setDiscussion(text)}
-                style={{flex:1, backgroundColor:"white",paddingTop:20,padding:20,borderRadius:20}}
-                placeholder="I'm looking for...">
+                style={{
+                backgroundColor:"white",
+                padding:20,
+                paddingTop:20,
+                borderRadius:12,
+                height:"85%",
+                textAlignVertical:"top"}}                
+                placeholder="Add description... ">
 
                 </TextInput>
+                </View>
 
             </View>
 
@@ -176,6 +194,7 @@ export default CreateDiscuss
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        //backgroundColor:"blue"
         //alignItems: 'center',
         //justifyContent: 'center',
     },
@@ -189,10 +208,10 @@ const styles = StyleSheet.create({
     inputContainer:{
         margin: 32,
         flexDirection:"row",
-
-        height:"100%"
+        height:"100%",
         
     }
 });
+
 
 
