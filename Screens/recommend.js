@@ -11,6 +11,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Button, Overlay, Icon } from 'react-native-elements';
 import { TextInput } from "react-native-paper";
 import { Avatar } from 'react-native-paper';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 
 const { width,height } = Dimensions.get("screen");
@@ -387,10 +388,11 @@ const Recommend = ({route,navigation}) => {
 
                 </View>
 
-                <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{width:"90%",height:"30%",justifyContent:"center",bottom:"10%"}}>
+                <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{width:"90%",justifyContent:"center",bottom:"10%"}}>
+                <KeyboardAwareScrollView scrollEnabled={false}>
                 <TextInput
                 autoFocus={true}
-                style={{padding:10,fontSize:20,margin:10}}
+                style={{padding:10,fontSize:20,margin:10,marginTop:20}}
 
                     placeholder="Search..."
                     value={title}
@@ -398,35 +400,36 @@ const Recommend = ({route,navigation}) => {
                 >
                     
                 </TextInput>
-        
-        <Button
-            style={{margin:10}}
-            title="Search"
-            onPress={() => {
-                    toggleOverlay("");
-                    navigation.navigate("Search Recommendation",{
-                        title:title,
-                        postId: postId,
-                        recNum: recNum,
+                </KeyboardAwareScrollView>
+                <View style={{margin:10}}>
+                <Button
+                    
+                    title="Search"
+                    onPress={() => {
+                            toggleOverlay("");
+                            navigation.navigate("Search Recommendation",{
+                                title:title,
+                                postId: postId,
+                                recNum: recNum,
 
 
 
-                    })
-                    setTitle("")
+                            })
+                            setTitle("")
 
-                  
-        }}
-        />
-        <Button
-            style={{margin:10}}
+                          
+                }}
+                />
+                <View style={{marginTop:10}}>
+                <Button
 
-            title="Cancel"
-            onPress= {() => {toggleOverlay("");}}
-        />
-      </Overlay>
-     
-
-    </View>
+                    title="Cancel"
+                    onPress= {() => {toggleOverlay("");}}
+                />
+                </View>
+                </View>
+              </Overlay>
+      </View>
     </View>
   )
 }
