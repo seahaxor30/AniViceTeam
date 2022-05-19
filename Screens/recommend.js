@@ -11,6 +11,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Button, Overlay, Icon } from 'react-native-elements';
 import { TextInput } from "react-native-paper";
 import { Avatar } from 'react-native-paper';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 
 const { width,height } = Dimensions.get("screen");
@@ -207,6 +208,14 @@ const Recommend = ({route,navigation}) => {
                   itemTitle: search[index]["itemTitle"],
                   itemUrl: search[index]["itemUrl"],
                   itemid: search[index]["itemid"],
+                  itemGenres: search[index]["itemGenres"],
+                  itemStatus:search[index]["itemStatus"],
+                  itemRating:search[index]["itemRating"],
+                  itemSeason:search[index]["itemSeason"],
+                  itemYear:search[index]["itemYear"],
+                  itemScore: search[index]["itemScore"],
+                  
+
 
                 });          
               }}>
@@ -223,6 +232,115 @@ const Recommend = ({route,navigation}) => {
                     style={styles.container}
                     resizeMode="cover"
                 />
+                {item.itemScore > 0 && item.itemScore <= 3 &&
+
+                  <View style={{backgroundColor:"#FF0000",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,    
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+                  {item.itemScore > 3 && item.itemScore <= 5 &&
+                  <View style={{backgroundColor:"#FF8822",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+                  {item.itemScore > 5 && item.itemScore <= 7 &&
+                  <View style={{backgroundColor:"#FFCC33",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+                  {item.itemScore > 7 && item.itemScore <= 8 &&
+                  <View style={{backgroundColor:"#B3CC33",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                      <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+
+                  {item.itemScore > 8 && item.itemScore <= 10 &&
+                  <View style={{backgroundColor:"#66CC33",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                      <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>
+                      {Math.round(item.itemScore * 10)}
+                      </Text>
+
+                      </View>
+                  }
+                  {item.itemScore == null &&
+                  <View style={{backgroundColor:"#cccccc",
+                      zIndex:1,
+                      bottom:110,
+                      left:"72%",
+                      margin:-15,
+                      width:35,
+                      height:35,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      borderRadius:5,
+                    }}>
+                    <Text style={{color:"white", fontWeight:"bold", fontSize:18}}>NA</Text>
+
+
+                      </View>
+                  }
             </View>
                 <View style = {styles.container3}>
                 <Text style={{fontSize: 16,fontWeight: "bold"}}
@@ -270,10 +388,11 @@ const Recommend = ({route,navigation}) => {
 
                 </View>
 
-                <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{width:"90%",height:"30%",justifyContent:"center",bottom:"10%"}}>
+                <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{width:"90%",justifyContent:"center",bottom:"10%"}}>
+                <KeyboardAwareScrollView scrollEnabled={false}>
                 <TextInput
                 autoFocus={true}
-                style={{padding:10,fontSize:20,margin:10}}
+                style={{padding:10,fontSize:20,margin:10,marginTop:20}}
 
                     placeholder="Search..."
                     value={title}
@@ -281,35 +400,36 @@ const Recommend = ({route,navigation}) => {
                 >
                     
                 </TextInput>
-        
-        <Button
-            style={{margin:10}}
-            title="Search"
-            onPress={() => {
-                    toggleOverlay("");
-                    navigation.navigate("Search Recommendation",{
-                        title:title,
-                        postId: postId,
-                        recNum: recNum,
+                </KeyboardAwareScrollView>
+                <View style={{margin:10}}>
+                <Button
+                    
+                    title="Search"
+                    onPress={() => {
+                            toggleOverlay("");
+                            navigation.navigate("Search Recommendation",{
+                                title:title,
+                                postId: postId,
+                                recNum: recNum,
 
 
 
-                    })
-                    setTitle("")
+                            })
+                            setTitle("")
 
-                  
-        }}
-        />
-        <Button
-            style={{margin:10}}
+                          
+                }}
+                />
+                <View style={{marginTop:10}}>
+                <Button
 
-            title="Cancel"
-            onPress= {() => {toggleOverlay("");}}
-        />
-      </Overlay>
-     
-
-    </View>
+                    title="Cancel"
+                    onPress= {() => {toggleOverlay("");}}
+                />
+                </View>
+                </View>
+              </Overlay>
+      </View>
     </View>
   )
 }

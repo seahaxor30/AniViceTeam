@@ -1,12 +1,13 @@
 import React from "react";
 import { Text,View,Alert,TouchableOpacity,FlatList,ScrollView,StyleSheet,Image,Dimensions} from "react-native";
 import ItemSeparator from "../components/ItemSeperator";
-const { width,height } = Dimensions.get("screen");
 import { Button, Overlay, Icon } from 'react-native-elements';
 import {getAuth,updateProfile} from 'firebase/auth'
 import { authenication } from "../firebase";
 import Toast from 'react-native-toast-message';
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+const { width,height } = Dimensions.get("screen");
+
 
 
  
@@ -80,11 +81,13 @@ const PfpEditor = ({navigation}) => {
             <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
         <Text style={styles.textPrimary}>Change Your Profile Picture?</Text>
         <Image source={{uri: imageUri}}style ={styles.overlayImage} />
-
+        <View style={{marginTop:10}}>
         <Text style={styles.textSecondary}>
           Click Yes or No
         </Text>
-        <Button
+        </View>
+        <View style={{marginTop:10}}>
+        <Button 
           title="Yes"
           onPress={() => {
                   updateUser(imageUri);
@@ -96,11 +99,15 @@ const PfpEditor = ({navigation}) => {
                     });
         }}
         />
+        <View style={{marginTop:10}}>
         <Button
           title="No"
           onPress= {() => {toggleOverlay("");}}
         />
+        </View>
+        </View>
       </Overlay>
+
         
         </View>)}
                 numColumns={3}
@@ -150,7 +157,7 @@ const styles = StyleSheet.create({
 
     overlayImage: {
         height: windowHieght / 2.5,
-        width: windowWidth - 50,
+        width: windowWidth - 30,
         marginTop: 10,
         borderRadius: 10,
       },
