@@ -55,6 +55,13 @@ const PopularScreen = ({navigation}) => {
                 itemid: topAnime[index]["mal_id"],
                 itemUrl:topAnime[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:topAnime[index]["title"],
+                itemGenres:topAnime[index]["genres"],
+                itemStatus:topAnime[index]["status"],
+                itemRating:topAnime[index]["rating"],
+                itemSeason:topAnime[index]["season"],
+                itemYear:topAnime[index]["year"],
+
+                itemScore: topAnime[index]["score"],
                 itemSynopsis: topAnime[index]["synopsis"]});
 
               

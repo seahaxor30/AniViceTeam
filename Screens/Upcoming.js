@@ -56,6 +56,12 @@ const UpcomingScreen = ({navigation}) => {
                 itemid: upcoming[index]["mal_id"],
                 itemUrl:upcoming[index]["images"]["jpg"]["large_image_url"],
                 itemTitle:upcoming[index]["title"],
+                itemGenres:upcoming[index]["genres"],
+                itemStatus:upcoming[index]["status"],
+                itemRating:upcoming[index]["rating"],
+                itemSeason:upcoming[index]["season"],
+                itemYear:upcoming[index]["year"],
+                itemScore: upcoming[index]["score"],
                 itemSynopsis: upcoming[index]["synopsis"]});
 
               
